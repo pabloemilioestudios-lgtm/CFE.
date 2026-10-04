@@ -1,1 +1,1309 @@
+/* =========================================================
+   ELECCIONES FAMILIARES
+   Sistema familiar de votación
+   ========================================================= */
 
+
+/* =========================
+   USUARIOS
+   ========================= */
+
+const USERS = {
+    VOriana: {
+        password: "VO1",
+        type: "voter"
+    },
+
+    VLeonel: {
+        password: "VL1",
+        type: "voter"
+    },
+
+    VZoraida: {
+        password: "VZ1",
+        type: "voter"
+    },
+
+    VArianny: {
+        password: "VA1",
+        type: "voter"
+    },
+
+    VEfren: {
+        password: "VE1",
+        type: "voter"
+    },
+
+    VPablo: {
+        password: "VP1",
+        type: "voter"
+    },
+
+    Gestion: {
+        password: "G34",
+        type: "admin"
+    }
+};
+
+
+/* =========================
+   PARTIDOS
+   ========================= */
+
+const PARTIES = [
+    {
+        id: "enmienda",
+        name: "Enmienda Sí",
+        short: "ES"
+    },
+
+    {
+        id: "contrario",
+        name: "Partido Contrario",
+        short: "PC"
+    },
+
+    {
+        id: "partido-h",
+        name: "Partido H",
+        short: "PH"
+    },
+
+    {
+        id: "cambio",
+        name: "Un Cambio Significativo",
+        short: "CS"
+    },
+
+    {
+        id: "convivir",
+        name: "Convivir",
+        short: "CV"
+    }
+];
+
+
+/* =========================
+   CONFIGURACIÓN
+   ========================= */
+
+const VOTERS = [
+    "VOriana",
+    "VLeonel",
+    "VZoraida",
+    "VArianny",
+    "VEfren",
+    "VPablo"
+];
+
+const STORAGE_KEY = "eleccionesFamiliaresData";
+
+let currentUser = null;
+let selectedParty = null;
+
+
+/* =========================
+   DATOS INICIALES
+   ========================= */
+
+function getDefaultData() {
+
+    return {
+        election: {
+            name: "",
+            description: "",
+            status: "inactive",
+            createdAt: null,
+            activatedAt: null,
+            finishedAt: null
+        },
+
+        candidates: {
+            enmienda: "",
+            contrario: "",
+            "partido-h": "",
+            cambio: "",
+            convivir: ""
+        },
+
+        votes: [],
+
+        receipts: [],
+
+        nextReceiptNumber: 1
+    };
+}
+
+
+function getData() {
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (!saved) {
+        const data = getDefaultData();
+        saveData(data);
+        return data;
+    }
+
+    try {
+        return JSON.parse(saved);
+    } catch {
+        const data = getDefaultData();
+        saveData(data);
+        return data;
+    }
+}
+
+
+function saveData(data) {
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(data)
+    );
+}
+
+
+/* =========================
+   LOGIN
+   ========================= */
+
+document
+    .getElementById("loginForm")
+    .addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        const username =
+            document.getElementById("username")
+                .value
+                .trim();
+
+        const password =
+            document.getElementById("password")
+                .value;
+
+        const error =
+            document.getElementById("loginError");
+
+        error.textContent = "";
+
+        if (!USERS[username]) {
+            error.textContent =
+                "Usuario o contraseña incorrectos.";
+            return;
+        }
+
+        if (USERS[username].password !== password) {
+            error.textContent =
+                "Usuario o contraseña incorrectos.";
+            return;
+        }
+
+        currentUser = username;
+
+        document.getElementById("username").value = "";
+        document.getElementById("password").value = "";
+
+        document.getElementById("loginScreen")
+            .classList.add("hidden");
+
+        if (USERS[username].type === "admin") {
+            showManagement();
+        } else {
+            showVoter();
+        }
+    });
+
+
+function logout() {
+
+    currentUser = null;
+    selectedParty = null;
+
+    document
+        .getElementById("loginScreen")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("voterScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("managementScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("receiptModal")
+        .classList.add("hidden");
+
+    document
+        .getElementById("confirmModal")
+        .classList.add("hidden");
+}
+
+
+/* =========================
+   PANTALLA VOTANTE
+   ========================= */
+
+function showVoter() {
+
+    document
+        .getElementById("voterScreen")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("managementScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("voterUserBadge")
+        .textContent = currentUser;
+
+    renderVoterScreen();
+}
+
+
+function renderVoterScreen() {
+
+    const data = getData();
+
+    document
+        .getElementById("voterElectionName")
+        .textContent =
+        data.election.name || "Sin elección activa";
+
+    document
+        .getElementById("voterElectionTitle")
+        .textContent =
+        data.election.name;
+
+    const waiting =
+        document.getElementById("voterWaiting");
+
+    const votingArea =
+        document.getElementById("votingArea");
+
+    const alreadyVoted =
+        document.getElementById("alreadyVoted");
+
+
+    waiting.classList.add("hidden");
+    votingArea.classList.add("hidden");
+    alreadyVoted.classList.add("hidden");
+
+
+    if (data.election.status !== "active") {
+
+        waiting.classList.remove("hidden");
+
+        waiting.querySelector("h2").textContent =
+            data.election.status === "finished"
+                ? "La elección ha finalizado"
+                : "No hay una elección activa";
+
+        waiting.querySelector("p").textContent =
+            data.election.status === "finished"
+                ? "Gestión ha finalizado esta elección."
+                : "Gestión todavía no ha activado una elección.";
+
+        return;
+    }
+
+
+    const existingVote =
+        data.votes.find(
+            vote => vote.voter === currentUser
+        );
+
+    if (existingVote) {
+
+        alreadyVoted.classList.remove("hidden");
+
+        document
+            .getElementById("viewReceiptBtn")
+            .onclick = function() {
+
+                const receipt =
+                    data.receipts.find(
+                        r => r.id === existingVote.receiptId
+                    );
+
+                if (receipt) {
+                    showReceipt(receipt);
+                }
+            };
+
+        return;
+    }
+
+
+    votingArea.classList.remove("hidden");
+
+    renderPartyCards();
+}
+
+
+function renderPartyCards() {
+
+    const data = getData();
+
+    const grid =
+        document.getElementById("partyGrid");
+
+    grid.innerHTML = "";
+
+    PARTIES.forEach(party => {
+
+        const candidate =
+            data.candidates[party.id] || "Candidato no asignado";
+
+        const card =
+            document.createElement("div");
+
+        card.className = "party-card";
+
+        if (selectedParty === party.id) {
+            card.classList.add("selected");
+        }
+
+        card.innerHTML = `
+            <div class="party-symbol">
+                ${party.short}
+            </div>
+
+            <h3>${escapeHtml(party.name)}</h3>
+
+            <p>
+                ${escapeHtml(candidate)}
+            </p>
+
+            <button
+                class="select-party"
+                onclick="selectParty('${party.id}')"
+            >
+                ${selectedParty === party.id
+                    ? "✓ Seleccionado"
+                    : "Seleccionar"}
+            </button>
+        `;
+
+        grid.appendChild(card);
+    });
+}
+
+
+function selectParty(partyId) {
+
+    selectedParty = partyId;
+
+    document
+        .getElementById("confirmVoteBtn")
+        .disabled = false;
+
+    document
+        .getElementById("confirmVoteBtn")
+        .classList.remove("disabled");
+
+    renderPartyCards();
+}
+
+
+/* =========================
+   CONFIRMACIÓN DE VOTO
+   ========================= */
+
+document
+    .getElementById("confirmVoteBtn")
+    .addEventListener("click", openConfirmModal);
+
+
+function openConfirmModal() {
+
+    if (!selectedParty) return;
+
+    const party =
+        PARTIES.find(
+            p => p.id === selectedParty
+        );
+
+    document
+        .getElementById("selectedPartyName")
+        .textContent = party.name;
+
+    document
+        .getElementById("confirmModal")
+        .classList.remove("hidden");
+}
+
+
+function closeConfirmModal() {
+
+    document
+        .getElementById("confirmModal")
+        .classList.add("hidden");
+}
+
+
+/* =========================
+   REGISTRAR VOTO
+   ========================= */
+
+function submitVote() {
+
+    if (!currentUser || !selectedParty) {
+        return;
+    }
+
+    const data = getData();
+
+    if (data.election.status !== "active") {
+
+        closeConfirmModal();
+
+        alert("La elección no está activa.");
+
+        return;
+    }
+
+
+    const alreadyVoted =
+        data.votes.some(
+            vote => vote.voter === currentUser
+        );
+
+    if (alreadyVoted) {
+
+        closeConfirmModal();
+
+        alert("Esta cuenta ya registró un voto.");
+
+        return;
+    }
+
+
+    const now = new Date();
+
+    const receiptNumber =
+        String(data.nextReceiptNumber)
+            .padStart(6, "0");
+
+    const party =
+        PARTIES.find(
+            p => p.id === selectedParty
+        );
+
+
+    const receipt = {
+
+        id: generateUniqueId(),
+
+        number: receiptNumber,
+
+        electionName:
+            data.election.name,
+
+        voter:
+            currentUser,
+
+        partyId:
+            party.id,
+
+        partyName:
+            party.name,
+
+        date:
+            now.toLocaleDateString("es-VE"),
+
+        time:
+            now.toLocaleTimeString("es-VE"),
+
+        timestamp:
+            now.toISOString()
+    };
+
+
+    data.votes.push({
+
+        voter:
+            currentUser,
+
+        partyId:
+            party.id,
+
+        receiptId:
+            receipt.id,
+
+        timestamp:
+            now.toISOString()
+    });
+
+
+    data.receipts.push(receipt);
+
+    data.nextReceiptNumber++;
+
+    saveData(data);
+
+    closeConfirmModal();
+
+    selectedParty = null;
+
+    showReceipt(receipt);
+}
+
+
+/* =========================
+   COMPROBANTE
+   ========================= */
+
+function showReceipt(receipt) {
+
+    document
+        .getElementById("receiptElectionName")
+        .textContent =
+        receipt.electionName;
+
+    document
+        .getElementById("receiptNumber")
+        .textContent =
+        receipt.number;
+
+    document
+        .getElementById("receiptVoter")
+        .textContent =
+        receipt.voter;
+
+    document
+        .getElementById("receiptParty")
+        .textContent =
+        receipt.partyName;
+
+    document
+        .getElementById("receiptDate")
+        .textContent =
+        receipt.date;
+
+    document
+        .getElementById("receiptTime")
+        .textContent =
+        receipt.time;
+
+    document
+        .getElementById("receiptModal")
+        .classList.remove("hidden");
+}
+
+
+function closeReceipt() {
+
+    document
+        .getElementById("receiptModal")
+        .classList.add("hidden");
+
+    if (
+        currentUser &&
+        USERS[currentUser] &&
+        USERS[currentUser].type === "voter"
+    ) {
+        renderVoterScreen();
+    }
+}
+
+
+/* =========================
+   GESTIÓN
+   ========================= */
+
+function showManagement() {
+
+    document
+        .getElementById("managementScreen")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("voterScreen")
+        .classList.add("hidden");
+
+    renderManagement();
+}
+
+
+function renderManagement() {
+
+    const data = getData();
+
+    document
+        .getElementById("electionNameInput")
+        .value =
+        data.election.name;
+
+    document
+        .getElementById("electionDescriptionInput")
+        .value =
+        data.election.description;
+
+
+    renderManagementStatus();
+    renderCandidateManagement();
+    renderStatistics();
+    renderResults();
+    renderVoterStatus();
+    renderReceipts();
+}
+
+
+function renderManagementStatus() {
+
+    const data = getData();
+
+    const badge =
+        document.getElementById("managementStatus");
+
+    if (data.election.status === "active") {
+
+        badge.textContent = "● ACTIVA";
+        badge.className =
+            "status-badge active";
+
+    } else if (data.election.status === "finished") {
+
+        badge.textContent = "● FINALIZADA";
+        badge.className =
+            "status-badge finished";
+
+    } else {
+
+        badge.textContent = "● NO INICIADA";
+        badge.className =
+            "status-badge inactive";
+    }
+}
+
+
+/* =========================
+   CREAR ELECCIÓN
+   ========================= */
+
+function createElection() {
+
+    const name =
+        document
+            .getElementById("electionNameInput")
+            .value
+            .trim();
+
+    const description =
+        document
+            .getElementById("electionDescriptionInput")
+            .value
+            .trim();
+
+
+    if (!name) {
+
+        alert(
+            "Escribe el nombre de la elección."
+        );
+
+        return;
+    }
+
+
+    const data = getData();
+
+    if (
+        data.election.status === "active"
+    ) {
+
+        alert(
+            "Finaliza la elección actual antes de crear otra."
+        );
+
+        return;
+    }
+
+
+    data.election = {
+
+        name,
+
+        description,
+
+        status: "inactive",
+
+        createdAt:
+            new Date().toISOString(),
+
+        activatedAt: null,
+
+        finishedAt: null
+    };
+
+
+    data.votes = [];
+    data.receipts = [];
+
+    saveData(data);
+
+    alert(
+        "La elección fue creada correctamente."
+    );
+
+    renderManagement();
+}
+
+
+/* =========================
+   ACTIVAR
+   ========================= */
+
+function activateElection() {
+
+    const data = getData();
+
+    if (!data.election.name) {
+
+        alert(
+            "Primero crea una elección."
+        );
+
+        return;
+    }
+
+
+    if (data.election.status === "active") {
+
+        alert(
+            "La elección ya está activa."
+        );
+
+        return;
+    }
+
+
+    data.election.status = "active";
+
+    data.election.activatedAt =
+        new Date().toISOString();
+
+    data.election.finishedAt = null;
+
+    saveData(data);
+
+    alert(
+        "La elección ha sido activada."
+    );
+
+    renderManagement();
+}
+
+
+/* =========================
+   FINALIZAR
+   ========================= */
+
+function finishElection() {
+
+    const data = getData();
+
+    if (data.election.status !== "active") {
+
+        alert(
+            "No hay una elección activa para finalizar."
+        );
+
+        return;
+    }
+
+
+    const confirmed =
+        confirm(
+            "¿Seguro que quieres finalizar la elección? Los votantes ya no podrán votar."
+        );
+
+    if (!confirmed) return;
+
+
+    data.election.status = "finished";
+
+    data.election.finishedAt =
+        new Date().toISOString();
+
+    saveData(data);
+
+    renderManagement();
+}
+
+
+/* =========================
+   ELIMINAR
+   ========================= */
+
+function deleteElection() {
+
+    const data = getData();
+
+    if (!data.election.name) {
+
+        alert(
+            "No existe una elección configurada."
+        );
+
+        return;
+    }
+
+
+    const confirmed =
+        confirm(
+            "¿Seguro que quieres eliminar la elección y sus votos/comprobantes?"
+        );
+
+    if (!confirmed) return;
+
+
+    const newData =
+        getDefaultData();
+
+    newData.nextReceiptNumber =
+        data.nextReceiptNumber;
+
+    saveData(newData);
+
+    renderManagement();
+
+    alert(
+        "La elección fue eliminada."
+    );
+}
+
+
+/* =========================
+   CANDIDATOS
+   ========================= */
+
+function renderCandidateManagement() {
+
+    const data = getData();
+
+    const container =
+        document.getElementById(
+            "candidateManagement"
+        );
+
+    container.innerHTML = "";
+
+
+    PARTIES.forEach(party => {
+
+        const row =
+            document.createElement("div");
+
+        row.className =
+            "candidate-row";
+
+        row.innerHTML = `
+
+            <strong>
+                ${escapeHtml(party.name)}
+            </strong>
+
+            <input
+                id="candidate-${party.id}"
+                type="text"
+                placeholder="Ej. Toyota Camry"
+                value="${escapeAttribute(
+                    data.candidates[party.id] || ""
+                )}"
+            >
+        `;
+
+        container.appendChild(row);
+    });
+}
+
+
+function saveCandidates() {
+
+    const data = getData();
+
+    PARTIES.forEach(party => {
+
+        const input =
+            document.getElementById(
+                `candidate-${party.id}`
+            );
+
+        data.candidates[party.id] =
+            input.value.trim();
+    });
+
+
+    saveData(data);
+
+    alert(
+        "Los candidatos fueron guardados."
+    );
+
+    renderManagement();
+}
+
+
+/* =========================
+   ESTADÍSTICAS
+   ========================= */
+
+function renderStatistics() {
+
+    const data = getData();
+
+    const totalVoters =
+        VOTERS.length;
+
+    const totalVotes =
+        data.votes.length;
+
+    const pending =
+        totalVoters - totalVotes;
+
+    const participation =
+        totalVoters === 0
+            ? 0
+            : Math.round(
+                (totalVotes / totalVoters) * 100
+            );
+
+
+    document
+        .getElementById("totalVoters")
+        .textContent =
+        totalVoters;
+
+    document
+        .getElementById("totalVotes")
+        .textContent =
+        totalVotes;
+
+    document
+        .getElementById("pendingVotes")
+        .textContent =
+        pending;
+
+    document
+        .getElementById("participation")
+        .textContent =
+        participation + "%";
+}
+
+
+/* =========================
+   RESULTADOS
+   ========================= */
+
+function getVoteCounts() {
+
+    const data = getData();
+
+    const counts = {};
+
+    PARTIES.forEach(party => {
+        counts[party.id] = 0;
+    });
+
+
+    data.votes.forEach(vote => {
+
+        if (
+            Object.prototype.hasOwnProperty.call(
+                counts,
+                vote.partyId
+            )
+        ) {
+            counts[vote.partyId]++;
+        }
+    });
+
+
+    return counts;
+}
+
+
+function renderResults() {
+
+    const counts =
+        getVoteCounts();
+
+    const total =
+        Object.values(counts)
+            .reduce(
+                (sum, value) =>
+                    sum + value,
+                0
+            );
+
+
+    const chart =
+        document.getElementById(
+            "resultsChart"
+        );
+
+    chart.innerHTML = "";
+
+
+    PARTIES.forEach(party => {
+
+        const votes =
+            counts[party.id];
+
+        const percentage =
+            total === 0
+                ? 0
+                : (votes / total) * 100;
+
+
+        const row =
+            document.createElement("div");
+
+        row.className =
+            "chart-row";
+
+        row.innerHTML = `
+
+            <div class="chart-name">
+                ${escapeHtml(party.name)}
+            </div>
+
+            <div class="chart-bar-bg">
+                <div
+                    class="chart-bar"
+                    style="width:${percentage}%"
+                ></div>
+            </div>
+
+            <div class="chart-number">
+                ${votes}
+            </div>
+
+        `;
+
+        chart.appendChild(row);
+    });
+}
+
+
+/* =========================
+   ESTADO DE VOTANTES
+   ========================= */
+
+function renderVoterStatus() {
+
+    const data = getData();
+
+    const container =
+        document.getElementById(
+            "voterStatusList"
+        );
+
+    container.innerHTML = "";
+
+
+    VOTERS.forEach(voter => {
+
+        const hasVoted =
+            data.votes.some(
+                vote =>
+                    vote.voter === voter
+            );
+
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "voter-status";
+
+
+        item.innerHTML = `
+
+            <span class="voter-name">
+                ${escapeHtml(voter)}
+            </span>
+
+            <span class="${
+                hasVoted
+                    ? "voted"
+                    : "pending"
+            }">
+
+                ${
+                    hasVoted
+                        ? "✓ VOTÓ"
+                        : "⏳ PENDIENTE"
+                }
+
+            </span>
+
+        `;
+
+
+        container.appendChild(item);
+    });
+}
+
+
+/* =========================
+   COMPROBANTES EN GESTIÓN
+   ========================= */
+
+function renderReceipts() {
+
+    const data = getData();
+
+    const container =
+        document.getElementById(
+            "receiptList"
+        );
+
+    const count =
+        document.getElementById(
+            "receiptCount"
+        );
+
+    count.textContent =
+        data.receipts.length;
+
+
+    container.innerHTML = "";
+
+
+    if (data.receipts.length === 0) {
+
+        container.innerHTML = `
+            <div class="muted">
+                Todavía no hay comprobantes registrados.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    [...data.receipts]
+        .reverse()
+        .forEach(receipt => {
+
+            const item =
+                document.createElement("div");
+
+            item.className =
+                "receipt-item";
+
+            item.innerHTML = `
+
+                <div>
+                    <span>COMPROBANTE</span>
+                    <strong class="receipt-id">
+                        #${escapeHtml(receipt.number)}
+                    </strong>
+                </div>
+
+                <div>
+                    <span>VOTANTE</span>
+                    <strong>
+                        ${escapeHtml(receipt.voter)}
+                    </strong>
+                </div>
+
+                <div>
+                    <span>PARTIDO</span>
+                    <strong>
+                        ${escapeHtml(receipt.partyName)}
+                    </strong>
+                </div>
+
+                <button
+                    class="secondary-btn receipt-view"
+                    onclick="viewManagementReceipt('${receipt.id}')"
+                >
+                    Ver comprobante
+                </button>
+
+            `;
+
+            container.appendChild(item);
+        });
+}
+
+
+function viewManagementReceipt(receiptId) {
+
+    const data = getData();
+
+    const receipt =
+        data.receipts.find(
+            r => r.id === receiptId
+        );
+
+    if (!receipt) {
+
+        alert(
+            "No se encontró el comprobante."
+        );
+
+        return;
+    }
+
+    showReceipt(receipt);
+}
+
+
+/* =========================
+   UTILIDADES
+   ========================= */
+
+function generateUniqueId() {
+
+    return (
+        Date.now().toString(36) +
+        Math.random()
+            .toString(36)
+            .substring(2, 10)
+    );
+}
+
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+function escapeAttribute(value) {
+
+    return escapeHtml(value);
+}
+
+
+/* =========================
+   INICIO
+   ========================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        getData();
+
+        renderCandidateManagement();
+
+        document
+            .getElementById("loginScreen")
+            .classList.remove("hidden");
+
+    }
+);
