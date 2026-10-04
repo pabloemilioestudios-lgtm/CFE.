@@ -7,201 +7,139 @@
 <title>CFE | Consejo Familiar Electoral</title>
 
 <style>
+
 *{
     box-sizing:border-box;
+}
+
+html,body{
     margin:0;
     padding:0;
+    min-height:100%;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f3f6fa;
+    color:#172033;
 }
 
-:root{
-    --blue:#0b1f3a;
-    --blue2:#12345b;
-    --gold:#c9a44c;
-    --gold2:#e0bd68;
-    --white:#ffffff;
-    --bg:#f4f6f9;
-    --text:#172033;
-    --muted:#697386;
-    --border:#e2e6ec;
-    --success:#16835b;
-    --danger:#c43c3c;
-    --shadow:0 12px 35px rgba(10,30,60,.10);
-}
+/* =========================
+   LOGIN
+========================= */
 
-body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    min-height:100vh;
-}
-
-button,
-input,
-textarea,
-select{
-    font:inherit;
-}
-
-button{
-    cursor:pointer;
-}
-
-/* LOGIN */
-
-.login-screen{
+#loginScreen{
     min-height:100vh;
     display:flex;
-    justify-content:center;
     align-items:center;
-    padding:24px;
-    background:
-        radial-gradient(circle at top right,rgba(201,164,76,.18),transparent 30%),
-        linear-gradient(135deg,#07172c,#102d50);
+    justify-content:center;
+    padding:20px;
+    background:linear-gradient(135deg,#064b91,#0875ca);
 }
 
 .login-card{
     width:100%;
     max-width:420px;
     background:white;
-    border-radius:26px;
-    padding:34px;
-    box-shadow:0 25px 70px rgba(0,0,0,.25);
+    border-radius:20px;
+    padding:35px;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
 }
 
 .logo{
-    width:72px;
-    height:72px;
+    width:75px;
+    height:75px;
     margin:0 auto 18px;
-    border-radius:22px;
-    background:var(--blue);
-    color:var(--gold2);
+    border-radius:18px;
     display:flex;
     align-items:center;
     justify-content:center;
+    background:#0756a5;
+    color:white;
     font-size:25px;
-    font-weight:800;
-    border:2px solid var(--gold);
+    font-weight:bold;
+    border-bottom:5px solid #d5a62a;
 }
 
 .login-card h1{
     text-align:center;
-    color:var(--blue);
-    font-size:27px;
+    margin:0;
+    color:#063d78;
+    font-size:25px;
 }
 
 .login-card .subtitle{
     text-align:center;
-    color:var(--muted);
-    margin-top:7px;
-    margin-bottom:28px;
+    color:#68758a;
+    margin:8px 0 30px;
 }
 
 .field{
-    margin-bottom:16px;
+    margin-bottom:18px;
 }
 
 .field label{
     display:block;
-    font-size:13px;
-    font-weight:700;
+    font-weight:bold;
     margin-bottom:7px;
 }
 
-.field input,
-.field textarea,
-.field select{
+.field input{
     width:100%;
-    border:1px solid var(--border);
-    border-radius:13px;
-    padding:13px 14px;
-    outline:none;
-    background:#fff;
-}
-
-.field textarea{
-    min-height:100px;
-    resize:vertical;
-}
-
-.field input:focus,
-.field textarea:focus,
-.field select:focus{
-    border-color:var(--gold);
-    box-shadow:0 0 0 3px rgba(201,164,76,.12);
-}
-
-.primary-btn{
-    width:100%;
-    border:0;
-    border-radius:13px;
     padding:14px;
-    background:var(--blue);
+    border:1px solid #d9e0e9;
+    border-radius:10px;
+    font-size:16px;
+    outline:none;
+}
+
+.field input:focus{
+    border-color:#0756a5;
+}
+
+.login-button{
+    width:100%;
+    border:0;
+    border-radius:10px;
+    padding:14px;
+    background:#0756a5;
     color:white;
-    font-weight:800;
-    transition:.2s;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
 }
 
-.primary-btn:hover{
-    background:var(--blue2);
-    transform:translateY(-1px);
-}
-
-.gold-btn{
-    border:0;
-    border-radius:12px;
-    padding:11px 16px;
-    background:var(--gold);
-    color:var(--blue);
-    font-weight:800;
-}
-
-.secondary-btn{
-    border:1px solid var(--border);
-    background:white;
-    color:var(--text);
-    border-radius:12px;
-    padding:11px 16px;
-    font-weight:700;
-}
-
-.danger-btn{
-    border:0;
-    background:#fff0f0;
-    color:var(--danger);
-    border-radius:12px;
-    padding:11px 16px;
-    font-weight:700;
+.login-button:hover{
+    background:#063d78;
 }
 
 .error{
-    background:#fff0f0;
-    color:var(--danger);
-    padding:11px;
-    border-radius:11px;
-    font-size:14px;
-    margin-bottom:15px;
     display:none;
+    background:#ffeaea;
+    color:#b32020;
+    padding:12px;
+    border-radius:9px;
+    margin-bottom:15px;
+    font-size:14px;
 }
 
-/* APP */
+/* =========================
+   APP
+========================= */
 
-.app{
+#app{
     display:none;
     min-height:100vh;
 }
 
 .topbar{
-    height:70px;
-    background:var(--blue);
-    color:white;
+    height:68px;
+    background:white;
+    border-bottom:1px solid #dfe5ed;
     display:flex;
     align-items:center;
     justify-content:space-between;
     padding:0 24px;
     position:sticky;
     top:0;
-    z-index:20;
-    box-shadow:0 4px 20px rgba(0,0,0,.12);
+    z-index:100;
 }
 
 .brand{
@@ -210,190 +148,3095 @@ button{
     gap:12px;
 }
 
-.brand-mark{
-    width:40px;
-    height:40px;
-    border-radius:12px;
-    border:1px solid var(--gold);
-    color:var(--gold2);
+.brand-logo{
+    width:42px;
+    height:42px;
+    border-radius:10px;
     display:flex;
-    justify-content:center;
     align-items:center;
-    font-weight:900;
+    justify-content:center;
+    background:#0756a5;
+    color:white;
+    font-weight:bold;
+    border-bottom:3px solid #d5a62a;
 }
 
-.brand strong{
-    font-size:16px;
+.brand-name{
+    color:#063d78;
+    font-weight:bold;
 }
 
-.user-area{
+.user-section{
     display:flex;
     align-items:center;
     gap:12px;
 }
 
-.user-name{
-    font-size:13px;
-    opacity:.85;
+.user-pill{
+    background:#eaf3ff;
+    color:#0756a5;
+    padding:8px 13px;
+    border-radius:20px;
+    font-size:14px;
+    font-weight:bold;
 }
 
 .logout{
-    border:1px solid rgba(255,255,255,.2);
-    background:rgba(255,255,255,.08);
+    border:0;
+    padding:9px 13px;
+    border-radius:8px;
+    cursor:pointer;
+    background:#edf0f4;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+
+.layout{
+    display:flex;
+    min-height:calc(100vh - 68px);
+}
+
+.sidebar{
+    width:235px;
+    background:#063f7d;
+    padding:18px 12px;
+    flex-shrink:0;
+}
+
+.sidebar-title{
     color:white;
-    border-radius:10px;
-    padding:9px 12px;
+    opacity:.55;
+    font-size:11px;
+    text-transform:uppercase;
+    padding:12px;
+}
+
+.menu-button{
+    width:100%;
+    border:0;
+    background:transparent;
+    color:white;
+    text-align:left;
+    padding:12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+    margin-bottom:4px;
+}
+
+.menu-button:hover,
+.menu-button.active{
+    background:rgba(255,255,255,.15);
 }
 
 .content{
+    flex:1;
+    padding:30px;
+    max-width:1450px;
     width:100%;
-    max-width:1150px;
     margin:auto;
-    padding:28px 20px 50px;
 }
 
-.page-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:20px;
+/* =========================
+   PAGE
+========================= */
+
+.page-header{
     margin-bottom:25px;
 }
 
-.page-head h2{
-    color:var(--blue);
+.page-header h2{
+    margin:0;
+    color:#063d78;
     font-size:28px;
 }
 
-.page-head p{
-    color:var(--muted);
-    margin-top:5px;
+.page-header p{
+    color:#68758a;
+    margin-top:7px;
 }
 
-.status{
-    display:inline-flex;
-    align-items:center;
-    gap:7px;
-    padding:7px 11px;
-    border-radius:999px;
-    background:#eaf8f1;
-    color:var(--success);
-    font-size:12px;
-    font-weight:800;
-}
-
-.status::before{
-    content:"";
-    width:7px;
-    height:7px;
-    background:currentColor;
-    border-radius:50%;
-}
-
-/* CARDS */
-
-.card{
+.panel{
     background:white;
-    border:1px solid var(--border);
-    border-radius:18px;
-    box-shadow:var(--shadow);
-    padding:22px;
+    border:1px solid #dfe5ed;
+    border-radius:15px;
+    padding:24px;
+    margin-bottom:20px;
+    box-shadow:0 6px 20px rgba(0,40,80,.05);
+}
+
+.panel h3{
+    margin:0 0 15px;
+    color:#063d78;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+    text-align:center;
+    padding:55px 20px;
+}
+
+.empty-icon{
+    font-size:48px;
+    margin-bottom:15px;
+}
+
+.empty h3{
+    margin-bottom:8px;
+}
+
+.empty p{
+    color:#68758a;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn{
+    border:0;
+    border-radius:9px;
+    padding:11px 16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.btn-primary{
+    background:#0756a5;
+    color:white;
+}
+
+.btn-success{
+    background:#18864b;
+    color:white;
+}
+
+.btn-warning{
+    background:#d5a62a;
+    color:white;
+}
+
+.btn-danger{
+    background:#c62828;
+    color:white;
+}
+
+.btn-light{
+    background:#edf0f4;
+    color:#263449;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
     margin-bottom:20px;
 }
 
-.card-title{
-    font-size:17px;
-    font-weight:850;
-    color:var(--blue);
-    margin-bottom:17px;
-}
-
-/* ELECTION HEADER */
-
-.election-banner{
-    background:linear-gradient(135deg,var(--blue),var(--blue2));
-    color:white;
-    border-radius:22px;
-    padding:28px;
-    margin-bottom:22px;
-    position:relative;
-    overflow:hidden;
-}
-
-.election-banner::after{
-    content:"";
-    position:absolute;
-    width:220px;
-    height:220px;
-    border:1px solid rgba(224,189,104,.22);
-    border-radius:50%;
-    right:-70px;
-    top:-100px;
-}
-
-.election-banner .tag{
-    color:var(--gold2);
-    font-size:12px;
-    font-weight:900;
-    letter-spacing:1px;
-    text-transform:uppercase;
-}
-
-.election-banner h1{
-    font-size:30px;
-    margin:8px 0;
-}
-
-.election-banner p{
-    color:rgba(255,255,255,.75);
-    max-width:700px;
-}
-
-/* PARTY CARDS */
-
-.party-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:16px;
-}
-
-.party{
+.stat{
     background:white;
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:18px;
+    border:1px solid #dfe5ed;
+    border-radius:14px;
+    padding:20px;
+}
+
+.stat-number{
+    font-size:30px;
+    font-weight:bold;
+    color:#0756a5;
+}
+
+.stat-label{
+    color:#68758a;
+    margin-top:5px;
+}
+
+/* =========================
+   FORMULARIOS
+========================= */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.form-group{
+    margin-bottom:15px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+.form-group label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select{
+    width:100%;
+    padding:12px;
+    border:1px solid #d9e0e9;
+    border-radius:9px;
+    font-family:Arial,sans-serif;
+    font-size:14px;
+}
+
+.form-group textarea{
+    min-height:100px;
+    resize:vertical;
+}
+
+/* =========================
+   ELECCIONES
+========================= */
+
+.election{
+    border:1px solid #dfe5ed;
+    border-radius:13px;
+    padding:20px;
+    margin-bottom:15px;
+    background:white;
+}
+
+.election-top{
     display:flex;
+    justify-content:space-between;
     gap:15px;
     align-items:center;
-    transition:.2s;
 }
 
-.party:hover{
-    border-color:var(--gold);
-    transform:translateY(-2px);
-    box-shadow:var(--shadow);
+.election h3{
+    margin:0;
+    color:#063d78;
 }
 
-.party-img{
-    width:82px;
-    height:82px;
-    border-radius:14px;
-    background:#edf1f5;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-shrink:0;
-    overflow:hidden;
-    color:var(--muted);
+.status{
+    display:inline-block;
+    padding:5px 10px;
+    border-radius:15px;
     font-size:12px;
-    text-align:center;
+    font-weight:bold;
 }
 
-.party-img img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
+.status.draft{
+    background:#edf0f4;
+    color:#637083;
 }
 
-.party-info{
-    flex
+.status.active{
+    background:#dff5e8;
+    color:#157341;
+}
+
+.status.paused{
+    background:#fff1ce;
+    color:#956800;
+}
+
+.status.finished{
+    background:#e5edf8;
+    color:#315a91;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+.mobile-button{
+    display:none;
+    border:0;
+    background:#edf2f8;
+    border-radius:8px;
+    padding:9px 11px;
+    cursor:pointer;
+}
+
+@media(max-width:850px){
+
+    .mobile-button{
+        display:block;
+    }
+
+    .sidebar{
+        display:none;
+        position:fixed;
+        left:0;
+        top:68px;
+        bottom:0;
+        z-index:90;
+    }
+
+    .sidebar.open{
+        display:block;
+    }
+
+    .brand-name{
+        display:none;
+    }
+
+    .user-pill{
+        display:none;
+    }
+
+    .content{
+        padding:18px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-group.full{
+        grid-column:auto;
+    }
+
+}
+
+@media(max-width:550px){
+
+    .topbar{
+        padding:0 12px;
+    }
+
+    .login-card{
+        padding:25px 20px;
+    }
+
+    .page-header h2{
+        font-size:23px;
+    }
+
+    .election-top{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     LOGIN
+===================================================== -->
+
+<div id="loginScreen">
+
+    <div class="login-card">
+
+        <div class="logo">
+            CFE
+        </div>
+
+        <h1>
+            Consejo Familiar Electoral
+        </h1>
+
+        <p class="subtitle">
+            Sistema de gestión electoral familiar
+        </p>
+
+        <div id="loginError" class="error">
+            Usuario o contraseña incorrectos.
+        </div>
+
+        <form id="loginForm">
+
+            <div class="field">
+
+                <label for="username">
+                    Usuario
+                </label>
+
+                <input
+                    id="username"
+                    type="text"
+                    placeholder="Ingrese su usuario"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+            <div class="field">
+
+                <label for="password">
+                    Contraseña
+                </label>
+
+                <input
+                    id="password"
+                    type="password"
+                    placeholder="Ingrese su contraseña"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="login-button"
+            >
+                Ingresar
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     APLICACIÓN
+===================================================== -->
+
+<div id="app">
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <button
+                class="mobile-button"
+                type="button"
+                onclick="toggleSidebar()"
+            >
+                ☰
+            </button>
+
+            <div class="brand-logo">
+                CFE
+            </div>
+
+            <div class="brand-name">
+                Consejo Familiar Electoral
+            </div>
+
+        </div>
+
+
+        <div class="user-section">
+
+            <div
+                id="userPill"
+                class="user-pill"
+            >
+            </div>
+
+            <button
+                type="button"
+                class="logout"
+                onclick="logout()"
+            >
+                Cerrar sesión
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <div class="layout">
+
+
+        <!-- SIDEBAR -->
+
+        <aside
+            id="sidebar"
+            class="sidebar"
+        >
+
+            <div class="sidebar-title">
+                Principal
+            </div>
+
+            <button
+                id="menuInicio"
+                class="menu-button active"
+                type="button"
+                onclick="navigate('inicio')"
+            >
+                🏠 Inicio
+            </button>
+
+            <button
+                id="menuElecciones"
+                class="menu-button"
+                type="button"
+                onclick="navigate('elecciones')"
+            >
+                🗳️ Elecciones
+            </button>
+
+
+            <div id="adminNavigation">
+
+                <div class="sidebar-title">
+                    Gestión electoral
+                </div>
+
+                <button
+                    class="menu-button"
+                    type="button"
+                    onclick="navigate('crear')"
+                >
+                    ＋ Crear elección
+                </button>
+
+                <button
+                    class="menu-button"
+                    type="button"
+                    onclick="navigate('resultados')"
+                >
+                    📊 Resultados
+                </button>
+
+                <button
+                    class="menu-button"
+                    type="button"
+                    onclick="navigate('comprobantes')"
+                >
+                    🧾 Comprobantes
+                </button>
+
+                <button
+                    class="menu-button"
+                    type="button"
+                    onclick="navigate('votantes')"
+                >
+                    👥 Votantes
+                </button>
+
+                <button
+                    class="menu-button"
+                    type="button"
+                    onclick="navigate('historial')"
+                >
+                    🕘 Historial
+                </button>
+
+            </div>
+
+        </aside>
+
+
+        <!-- CONTENIDO -->
+
+        <main
+            id="content"
+            class="content"
+        >
+        </main>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   CFE
+   SISTEMA BASE
+===================================================== */
+
+
+/* =====================================================
+   USUARIOS
+===================================================== */
+
+const USERS = {
+
+    VOriana: {
+        password: "VO1",
+        name: "Oriana",
+        role: "voter"
+    },
+
+    VLeonel: {
+        password: "VL1",
+        name: "Leonel",
+        role: "voter"
+    },
+
+    VZoraida: {
+        password: "VZ1",
+        name: "Zoraida",
+        role: "voter"
+    },
+
+    VArianny: {
+        password: "VA1",
+        name: "Arianny",
+        role: "voter"
+    },
+
+    VEfren: {
+        password: "VE1",
+        name: "Efrén",
+        role: "voter"
+    },
+
+    VPablo: {
+        password: "VP1",
+        name: "Pablo",
+        role: "voter"
+    },
+
+    "Gestión": {
+        password: "G34",
+        name: "Gestión",
+        role: "admin"
+    }
+
+};
+
+
+/* =====================================================
+   PARTIDOS
+===================================================== */
+
+const PARTIES = [
+    "Enmienda Sí",
+    "Partido Contrario",
+    "Partido H",
+    "Un Cambio Significativo",
+    "Convivir"
+];
+
+
+/* =====================================================
+   DATOS
+===================================================== */
+
+const STORAGE_KEY = "CFE_ESTABLE_V1";
+
+let currentUser = null;
+
+let database = loadDatabase();
+
+
+function loadDatabase(){
+
+    const saved =
+        localStorage.getItem(STORAGE_KEY);
+
+    if(!saved){
+
+        return {
+            elections: [],
+            receipts: [],
+            receiptNumber: 0
+        };
+
+    }
+
+    try{
+
+        return JSON.parse(saved);
+
+    }catch(error){
+
+        console.error(
+            "Error leyendo datos:",
+            error
+        );
+
+        return {
+            elections: [],
+            receipts: [],
+            receiptNumber: 0
+        };
+
+    }
+
+}
+
+
+function saveDatabase(){
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(database)
+    );
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+document
+.getElementById("loginForm")
+.addEventListener("submit", function(event){
+
+    event.preventDefault();
+
+    const username =
+        document
+        .getElementById("username")
+        .value
+        .trim();
+
+    const password =
+        document
+        .getElementById("password")
+        .value;
+
+    let user = USERS[username];
+
+    /*
+       Permitir Gestión sin tilde.
+    */
+
+    if(username === "Gestion"){
+        user = USERS["Gestión"];
+    }
+
+
+    if(
+        user &&
+        user.password === password
+    ){
+
+        currentUser = {
+
+            username:
+                username === "Gestion"
+                ? "Gestión"
+                : username,
+
+            name:user.name,
+
+            role:user.role
+
+        };
+
+
+        document
+        .getElementById("loginScreen")
+        .style.display = "none";
+
+
+        document
+        .getElementById("app")
+        .style.display = "block";
+
+
+        document
+        .getElementById("userPill")
+        .textContent =
+            currentUser.name;
+
+
+        document
+        .getElementById("adminNavigation")
+        .style.display =
+            currentUser.role === "admin"
+            ? "block"
+            : "none";
+
+
+        document
+        .getElementById("loginError")
+        .style.display = "none";
+
+
+        navigate("inicio");
+
+
+    }else{
+
+        document
+        .getElementById("loginError")
+        .style.display = "block";
+
+    }
+
+});
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    currentUser = null;
+
+    document
+    .getElementById("app")
+    .style.display = "none";
+
+    document
+    .getElementById("loginScreen")
+    .style.display = "flex";
+
+    document
+    .getElementById("password")
+    .value = "";
+
+}
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+function toggleSidebar(){
+
+    document
+    .getElementById("sidebar")
+    .classList.toggle("open");
+
+}
+
+
+/* =====================================================
+   NAVEGACIÓN
+===================================================== */
+
+function navigate(page){
+
+    if(!currentUser){
+        return;
+    }
+
+
+    const content =
+        document.getElementById("content");
+
+
+    document
+    .querySelectorAll(".menu-button")
+    .forEach(function(button){
+
+        button.classList.remove("active");
+
+    });
+
+
+    if(page === "inicio"){
+
+        document
+        .getElementById("menuInicio")
+        .classList.add("active");
+
+        renderInicio(content);
+
+    }
+
+
+    else if(page === "elecciones"){
+
+        document
+        .getElementById("menuElecciones")
+        .classList.add("active");
+
+        renderElecciones(content);
+
+    }
+
+
+    else if(page === "crear"){
+
+        if(currentUser.role !== "admin"){
+            return;
+        }
+
+        renderCrear(content);
+
+    }
+
+
+    else if(page === "resultados"){
+
+        if(currentUser.role !== "admin"){
+            return;
+        }
+
+        renderResultados(content);
+
+    }
+
+
+    else if(page === "comprobantes"){
+
+        if(currentUser.role !== "admin"){
+            return;
+        }
+
+        renderComprobantes(content);
+
+    }
+
+
+    else if(page === "votantes"){
+
+        if(currentUser.role !== "admin"){
+            return;
+        }
+
+        renderVotantes(content);
+
+    }
+
+
+    else if(page === "historial"){
+
+        if(currentUser.role !== "admin"){
+            return;
+        }
+
+        renderHistorial(content);
+
+    }
+
+
+    document
+    .getElementById("sidebar")
+    .classList.remove("open");
+
+}
+
+
+/* =====================================================
+   INICIO
+===================================================== */
+
+function renderInicio(content){
+
+    if(currentUser.role === "admin"){
+
+        const totalVotes =
+            database.elections.reduce(
+                function(total,election){
+
+                    return total +
+                        getTotalVotes(election);
+
+                },
+                0
+            );
+
+
+        const active =
+            database.elections.find(
+                function(election){
+
+                    return election.status === "active";
+
+                }
+            );
+
+
+        content.innerHTML = `
+
+            <div class="page-header">
+
+                <h2>
+                    Panel de Gestión
+                </h2>
+
+                <p>
+                    Bienvenido al Consejo Familiar Electoral.
+                </p>
+
+            </div>
+
+
+            <div class="stats">
+
+                <div class="stat">
+
+                    <div class="stat-number">
+                        ${database.elections.length}
+                    </div>
+
+                    <div class="stat-label">
+                        Elecciones creadas
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div class="stat-number">
+                        ${totalVotes}
+                    </div>
+
+                    <div class="stat-label">
+                        Votos emitidos
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div class="stat-number">
+                        ${database.receipts.length}
+                    </div>
+
+                    <div class="stat-label">
+                        Comprobantes
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <h3>
+                    Estado del sistema
+                </h3>
+
+
+                ${
+                    active
+
+                    ? `
+
+                        <p>
+                            Elección activa:
+                            <strong>
+                                ${escapeHTML(active.name)}
+                            </strong>
+                        </p>
+
+                        <br>
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="openElection('${active.id}')"
+                        >
+                            Administrar elección
+                        </button>
+
+                    `
+
+                    : `
+
+                        <div class="empty">
+
+                            <div class="empty-icon">
+                                🗳️
+                            </div>
+
+                            <h3>
+                                No hay elecciones activas
+                            </h3>
+
+                            <p>
+                                El sistema está listo para que Gestión cree la primera elección.
+                            </p>
+
+                            <br>
+
+                            <button
+                                class="btn btn-primary"
+                                onclick="navigate('crear')"
+                            >
+                                ＋ Crear elección
+                            </button>
+
+                        </div>
+
+                    `
+                }
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    /* =================
+       VOTANTE
+    ================= */
+
+    const active =
+        database.elections.find(
+            function(election){
+
+                return election.status === "active";
+
+            }
+        );
+
+
+    if(!active){
+
+        content.innerHTML = `
+
+            <div class="page-header">
+
+                <h2>
+                    Inicio
+                </h2>
+
+                <p>
+                    Portal del votante.
+                </p>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        🗳️
+                    </div>
+
+                    <h3>
+                        No hay elecciones disponibles
+                    </h3>
+
+                    <p>
+                        Actualmente no existe una elección activa.
+                    </p>
+
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const voted =
+        active.votedUsers &&
+        active.votedUsers.includes(
+            currentUser.username
+        );
+
+
+    content.innerHTML = `
+
+        <div class="page-header">
+
+            <h2>
+                Elección disponible
+            </h2>
+
+            <p>
+                ${escapeHTML(active.name)}
+            </p>
+
+        </div>
+
+
+        <div class="panel">
+
+            <h3>
+                ${escapeHTML(active.name)}
+            </h3>
+
+            <p>
+                ${escapeHTML(active.description || "")}
+            </p>
+
+            <br>
+
+            ${
+                voted
+
+                ? `
+
+                    <strong>
+                        ✓ Usted ya emitió su voto.
+                    </strong>
+
+                `
+
+                : `
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="openElection('${active.id}')"
+                    >
+                        Ver tarjetón electoral
+                    </button>
+
+                `
+            }
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   ELECCIONES
+===================================================== */
+
+function renderElecciones(content){
+
+    if(currentUser.role !== "admin"){
+
+        renderInicio(content);
+
+        return;
+
+    }
+
+
+    if(database.elections.length === 0){
+
+        content.innerHTML = `
+
+            <div class="page-header">
+
+                <h2>
+                    Elecciones
+                </h2>
+
+                <p>
+                    Administración electoral.
+                </p>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        🗳️
+                    </div>
+
+                    <h3>
+                        No hay elecciones creadas
+                    </h3>
+
+                    <p>
+                        El sistema comienza completamente vacío.
+                    </p>
+
+                    <br>
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="navigate('crear')"
+                    >
+                        ＋ Crear primera elección
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    content.innerHTML = `
+
+        <div class="page-header">
+
+            <h2>
+                Elecciones
+            </h2>
+
+            <p>
+                Procesos electorales del CFE.
+            </p>
+
+        </div>
+
+
+        ${database.elections.map(function(election){
+
+            return `
+
+                <div class="election">
+
+                    <div class="election-top">
+
+                        <div>
+
+                            <h3>
+                                ${escapeHTML(election.name)}
+                            </h3>
+
+                            <p style="color:#68758a;margin-top:7px">
+                                ${getTotalVotes(election)} votos
+                            </p>
+
+                        </div>
+
+                        ${statusHTML(election.status)}
+
+                    </div>
+
+
+                    <br>
+
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="openElection('${election.id}')"
+                    >
+                        Administrar
+                    </button>
+
+                </div>
+
+            `;
+
+        }).join("")}
+
+    `;
+
+}
+
+
+/* =====================================================
+   CREAR ELECCIÓN
+===================================================== */
+
+function renderCrear(content){
+
+    content.innerHTML = `
+
+        <div class="page-header">
+
+            <h2>
+                Crear elección
+            </h2>
+
+            <p>
+                Configure la elección antes de publicarla.
+            </p>
+
+        </div>
+
+
+        <form
+            id="createElectionForm"
+        >
+
+
+            <div class="panel">
+
+                <h3>
+                    Información de la elección
+                </h3>
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Nombre
+                        </label>
+
+                        <input
+                            id="newElectionName"
+                            placeholder="Nombre de la elección"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Tema
+                        </label>
+
+                        <input
+                            id="newElectionTheme"
+                            placeholder="Tema de la elección"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label>
+                            Descripción
+                        </label>
+
+                        <textarea
+                            id="newElectionDescription"
+                            placeholder="Descripción de la elección"
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Inicio
+                        </label>
+
+                        <input
+                            id="newElectionStart"
+                            type="datetime-local"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Finalización
+                        </label>
+
+                        <input
+                            id="newElectionEnd"
+                            type="datetime-local"
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <h3>
+                    Partidos y candidatos
+                </h3>
+
+
+                <div id="partyForms"></div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Guardar como borrador
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-light"
+                    onclick="navigate('elecciones')"
+                >
+                    Cancelar
+                </button>
+
+            </div>
+
+
+        </form>
+
+    `;
+
+
+    const partyForms =
+        document.getElementById("partyForms");
+
+
+    PARTIES.forEach(function(party,index){
+
+        partyForms.innerHTML += `
+
+            <div
+                style="
+                    padding:18px;
+                    border:1px solid #dfe5ed;
+                    border-radius:12px;
+                    margin-bottom:15px;
+                "
+            >
+
+                <h3>
+                    ${index + 1}. ${party}
+                </h3>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Candidato / opción
+                    </label>
+
+                    <input
+                        id="candidate_${index}"
+                        placeholder="Nombre del candidato"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Descripción del candidato / opción
+                    </label>
+
+                    <textarea
+                        id="description_${index}"
+                        placeholder="Descripción que verá el votante"
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    document
+    .getElementById("createElectionForm")
+    .addEventListener(
+        "submit",
+        createElection
+    );
+
+}
+
+
+/* =====================================================
+   CREAR
+===================================================== */
+
+function createElection(event){
+
+    event.preventDefault();
+
+
+    const name =
+        document
+        .getElementById("newElectionName")
+        .value
+        .trim();
+
+
+    if(!name){
+
+        alert(
+            "Debe colocar un nombre."
+        );
+
+        return;
+
+    }
+
+
+    const parties =
+        PARTIES.map(function(party,index){
+
+            return {
+
+                id:"party-" + index,
+
+                name:party,
+
+                candidate:
+                    document
+                    .getElementById(
+                        "candidate_" + index
+                    )
+                    .value
+                    .trim(),
+
+                description:
+                    document
+                    .getElementById(
+                        "description_" + index
+                    )
+                    .value
+                    .trim(),
+
+                votes:0
+
+            };
+
+        });
+
+
+    const election = {
+
+        id:
+            "election-" +
+            Date.now(),
+
+        name:name,
+
+        theme:
+            document
+            .getElementById("newElectionTheme")
+            .value
+            .trim(),
+
+        description:
+            document
+            .getElementById("newElectionDescription")
+            .value
+            .trim(),
+
+        start:
+            document
+            .getElementById("newElectionStart")
+            .value,
+
+        end:
+            document
+            .getElementById("newElectionEnd")
+            .value,
+
+        status:"draft",
+
+        parties:parties,
+
+        votedUsers:[],
+
+        createdAt:
+            new Date().toISOString()
+
+    };
+
+
+    database.elections.push(
+        election
+    );
+
+
+    saveDatabase();
+
+
+    alert(
+        "Elección creada correctamente como Borrador."
+    );
+
+
+    navigate("elecciones");
+
+}
+
+
+/* =====================================================
+   ABRIR ELECCIÓN
+===================================================== */
+
+function openElection(id){
+
+    const election =
+        database.elections.find(
+            function(item){
+
+                return item.id === id;
+
+            }
+        );
+
+
+    if(!election){
+        return;
+    }
+
+
+    if(currentUser.role === "admin"){
+
+        renderAdminElection(election);
+
+    }else{
+
+        renderVoterElection(election);
+
+    }
+
+}
+
+
+/* =====================================================
+   ADMIN
+===================================================== */
+
+function renderAdminElection(election){
+
+    const content =
+        document.getElementById("content");
+
+
+    content.innerHTML = `
+
+        <div class="page-header">
+
+            <h2>
+                ${escapeHTML(election.name)}
+            </h2>
+
+            <p>
+                Administración electoral
+            </p>
+
+        </div>
+
+
+        <div class="panel">
+
+            <h3>
+                Información
+            </h3>
+
+            <p>
+                <strong>Estado:</strong>
+                ${statusHTML(election.status)}
+            </p>
+
+            <p style="margin-top:10px">
+                <strong>Tema:</strong>
+                ${escapeHTML(election.theme || "Sin especificar")}
+            </p>
+
+            <p style="margin-top:10px">
+                <strong>Descripción:</strong>
+                ${escapeHTML(election.description || "Sin descripción")}
+            </p>
+
+            <p style="margin-top:10px">
+                <strong>Votos:</strong>
+                ${getTotalVotes(election)}
+            </p>
+
+            <br>
+
+
+            ${
+                election.status === "draft"
+
+                ? `
+
+                    <button
+                        class="btn btn-success"
+                        onclick="changeStatus('${election.id}','active')"
+                    >
+                        ▶ Activar
+                    </button>
+
+                `
+
+                : ""
+
+            }
+
+
+            ${
+                election.status === "active"
+
+                ? `
+
+                    <button
+                        class="btn btn-warning"
+                        onclick="changeStatus('${election.id}','paused')"
+                    >
+                        ⏸ Pausar
+                    </button>
+
+                    <button
+                        class="btn btn-danger"
+                        onclick="changeStatus('${election.id}','finished')"
+                    >
+                        ■ Finalizar
+                    </button>
+
+                `
+
+                : ""
+
+            }
+
+
+            ${
+                election.status === "paused"
+
+                ? `
+
+                    <button
+                        class="btn btn-success"
+                        onclick="changeStatus('${election.id}','active')"
+                    >
+                        ▶ Reanudar
+                    </button>
+
+                    <button
+                        class="btn btn-danger"
+                        onclick="changeStatus('${election.id}','finished')"
+                    >
+                        ■ Finalizar
+                    </button>
+
+                `
+
+                : ""
+
+            }
+
+
+            <button
+                class="btn btn-light"
+                onclick="navigate('resultados')"
+            >
+                📊 Resultados
+            </button>
+
+
+            <button
+                class="btn btn-danger"
+                onclick="deleteElection('${election.id}')"
+            >
+                🗑 Eliminar
+            </button>
+
+        </div>
+
+
+        <div class="panel">
+
+            <h3>
+                Partidos
+            </h3>
+
+
+            ${election.parties.map(function(party){
+
+                return `
+
+                    <div
+                        style="
+                            border:1px solid #dfe5ed;
+                            padding:16px;
+                            border-radius:10px;
+                            margin-bottom:10px;
+                        "
+                    >
+
+                        <strong>
+                            ${escapeHTML(party.name)}
+                        </strong>
+
+                        <p style="margin-top:7px">
+                            Candidato:
+                            ${escapeHTML(
+                                party.candidate ||
+                                "Sin candidato"
+                            )}
+                        </p>
+
+                        <p
+                            style="
+                                color:#68758a;
+                                margin-top:5px;
+                            "
+                        >
+                            ${escapeHTML(
+                                party.description ||
+                                "Sin descripción"
+                            )}
+                        </p>
+
+                        <p style="margin-top:7px">
+                            Votos:
+                            <strong>
+                                ${party.votes}
+                            </strong>
+                        </p>
+
+                    </div>
+
+                `;
+
+            }).join("")}
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   CAMBIAR ESTADO
+===================================================== */
+
+function changeStatus(id,status){
+
+    const election =
+        database.elections.find(
+            function(item){
+
+                return item.id === id;
+
+            }
+        );
+
+
+    if(!election){
+        return;
+    }
+
+
+    if(status === "active"){
+
+        const another =
+            database.elections.find(
+                function(item){
+
+                    return (
+                        item.id !== id &&
+                        item.status === "active"
+                    );
+
+                }
+            );
+
+
+        if(another){
+
+            alert(
+                "Ya existe otra elección activa."
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    election.status = status;
+
+    saveDatabase();
+
+    renderAdminElection(election);
+
+}
+
+
+/* =====================================================
+   ELIMINAR
+===================================================== */
+
+function deleteElection(id){
+
+    const election =
+        database.elections.find(
+            function(item){
+
+                return item.id === id;
+
+            }
+        );
+
+
+    if(!election){
+        return;
+    }
+
+
+    const confirmation =
+        confirm(
+            "¿Desea eliminar esta elección?"
+        );
+
+
+    if(!confirmation){
+        return;
+    }
+
+
+    database.elections =
+        database.elections.filter(
+            function(item){
+
+                return item.id !== id;
+
+            }
+        );
+
+
+    saveDatabase();
+
+    navigate("elecciones");
+
+}
+
+
+/* =====================================================
+   VOTANTE
+===================================================== */
+
+function renderVoterElection(election){
+
+    const content =
+        document.getElementById("content");
+
+
+    if(election.status !== "active"){
+
+        content.innerHTML = `
+
+            <div class="panel">
+
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        🔒
+                    </div>
+
+                    <h3>
+                        Elección no disponible
+                    </h3>
+
+                    <p>
+                        Esta elección no está activa.
+                    </p>
+
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    if(
+        election.votedUsers &&
+        election.votedUsers.includes(
+            currentUser.username
+        )
+    ){
+
+        content.innerHTML = `
+
+            <div class="panel">
+
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        ✓
+                    </div>
+
+                    <h3>
+                        Ya emitió su voto
+                    </h3>
+
+                    <p>
+                        Su voto ya fue registrado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    content.innerHTML = `
+
+        <div class="page-header">
+
+            <h2>
+                Tarjetón electoral
+            </h2>
+
+            <p>
+                ${escapeHTML(election.name)}
+            </p>
+
+        </div>
+
+
+        <div class="panel">
+
+            <h3>
+                Seleccione una opción
+            </h3>
+
+
+            <div id="ballot"></div>
+
+
+            <br>
+
+            <button
+                class="btn btn-primary"
+                onclick="submitVote('${election.id}')"
+            >
+                Confirmar voto
+            </button>
+
+        </div>
+
+    `;
+
+
+    const ballot =
+        document.getElementById("ballot");
+
+
+    election.parties.forEach(function(party){
+
+        ballot.innerHTML += `
+
+            <label
+                style="
+                    display:block;
+                    border:2px solid #dfe5ed;
+                    border-radius:12px;
+                    padding:18px;
+                    margin-bottom:12px;
+                    cursor:pointer;
+                "
+            >
+
+                <input
+                    type="radio"
+                    name="vote"
+                    value="${party.id}"
+                    style="
+                        width:20px;
+                        height:20px;
+                        vertical-align:middle;
+                    "
+                >
+
+                <strong style="margin-left:8px">
+                    ${escapeHTML(party.name)}
+                </strong>
+
+
+                <div
+                    style="
+                        margin-left:34px;
+                        margin-top:8px;
+                    "
+                >
+
+                    <strong>
+                        ${escapeHTML(
+                            party.candidate ||
+                            "Candidato / opción"
+                        )}
+                    </strong>
+
+
+                    <p
+                        style="
+                            color:#68758a;
+                            margin-top:6px;
+                        "
+                    >
+                        ${escapeHTML(
+                            party.description ||
+                            "Sin descripción."
+                        )}
+                    </p>
+
+                </div>
+
+            </label>
+
+        `;
+
+    });
+
+}
+
+
+/* =====================================================
+   VOTAR
+===================================================== */
+
+function submitVote(electionId){
+
+    const election =
+        database.elections.find(
+            function(item){
+
+                return item.id === electionId;
+
+            }
+        );
+
+
+    if(!election){
+        return;
+    }
+
+
+    const selected =
+        document.querySelector(
+            'input[name="vote"]:checked'
+        );
+
+
+    if(!selected){
+
+        alert(
+            "Debe seleccionar una opción."
+        );
+
+        return;
+
+    }
+
+
+    const party =
+        election.parties.find(
+            function(item){
+
+                return item.id === selected.value;
+
+            }
+        );
+
+
+    if(!party){
+        return;
+    }
+
+
+    if(
+        election.votedUsers.includes(
+            currentUser.username
+        )
+    ){
+
+        alert(
+            "Usted ya votó."
+        );
+
+        return;
+
+    }
+
+
+    const confirmation =
+        confirm(
+            "¿Confirma su voto por " +
+            party.name +
+            "?"
+        );
+
+
+    if(!confirmation){
+        return;
+    }
+
+
+    party.votes++;
+
+    election.votedUsers.push(
+        currentUser.username
+    );
+
+
+    database.receiptNumber++;
+
+
+    const number =
+        String(
+            database.receiptNumber
+        ).padStart(6,"0");
+
+
+    const receipt = {
+
+        id:
+            "receipt-" +
+            Date.now(),
+
+        number:number,
+
+        electionId:
+            election.id,
+
+        electionName:
+            election.name,
+
+        voter:
+            currentUser.name,
+
+        voterUsername:
+            currentUser.username,
+
+        party:
+            party.name,
+
+        candidate:
+            party.candidate,
+
+        date:
+            new Date().toISOString()
+
+    };
+
+
+    database.receipts.push(
+        receipt
+    );
+
+
+    saveDatabase();
+
+
+    showReceipt(receipt);
+
+}
+
+
+/* =====================================================
+   COMPROBANTE
+===================================================== */
+
+function showReceipt(receipt){
+
+    const content =
+        document.getElementById("content");
+
+
+    content.innerHTML = `
+
+        <div class="page-header">
+
+            <h2>
+                Comprobante
+            </h2>
+
+            <p>
+                Voto registrado correctamente.
+            </p>
+
+        </div>
+
+
+        <div
+            class="panel"
+            style="
+                max-width:650px;
+                margin:auto;
+            "
+        >
+
+            <div style="text-align:center">
+
+                <div class="logo">
+                    CFE
+                </div>
+
+                <h2>
+                    COMPROBANTE DE VOTO
+                </h2>
+
+                <div
+                    style="
+                        font-size:35px;
+                        font-weight:bold;
+                        color:#0756a5;
+                        margin:15px 0 25px;
+                    "
+                >
+                    #${receipt.number}
+                </div>
+
+            </div>
+
+
+            <hr>
+
+
+            <p style="padding:13px 0">
+                <strong>Elección:</strong>
+                ${escapeHTML(receipt.electionName)}
+            </p>
+
+
+            <p style="padding:13px 0">
+                <strong>Votante:</strong>
+                ${escapeHTML(receipt.voter)}
+            </p>
+
+
+            <p style="padding:13px 0">
+                <strong>Partido:</strong>
+                ${escapeHTML(receipt.party)}
+            </p>
+
+
+            <p style="padding:13px 0">
+                <strong>Candidato / opción:</strong>
+                ${escapeHTML(
+                    receipt.candidate ||
+                    "—"
+                )}
+            </p>
+
+
+            <p style="padding:13px 0">
+                <strong>Fecha:</strong>
+                ${formatDate(receipt.date)}
+            </p>
+
+
+            <div
+                style="
+                    text-align:center;
+                    color:#18864b;
+                    font-weight:bold;
+                    margin-top:15px;
+                "
+            >
+                ✓ VOTO REGISTRADO
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   RESULTADOS
+===================================================== */
+
+function renderResultados(content){
+
+    if(database.elections.length === 0){
+
+        content.innerHTML = `
+
+            <div class="panel">
+
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        No hay resultados
+                    </h3>
+
+                    <p>
+                        Todavía no existen elecciones.
+                    </p>
+
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    content.innerHTML = `
+
+        <div class="page-header">
+
+            <h2>
+                Resultados
+            </h2>
+
+            <p>
+                Resultados de los procesos electorales.
+            </p>
+
+        </div>
+
+
+        ${database.elections.map(function(election){
+
+            const total =
+                getTotalVotes(election);
+
+
+            return `
+
+                <div class="panel">
+
+                    <h3>
+                        ${escapeHTML(election.name)}
+                    </h3>
+
+
+                    <p>
+                        Total de votos:
+                        <strong>
+                            ${total}
+                        </strong>
+                    </p>
+
+
+                    <br>
+
+
+                    ${election.parties.map(function(party){
+
+                        const percentage =
+                            total === 0
+                            ? 0
+                            : (
+                                party.votes /
+                                total
+                            ) * 100;
+
+
+                        return `
+
+                            <div
+                                style="
+                                    margin-bottom:18px;
+                                "
+                            >
+
+                                <div
+                                    style="
+                                        display:flex;
+                                        justify-content:space-between;
+                                        margin-bottom:5px;
+                                    "
+                                >
+
+                                    <strong>
+                                        ${escapeHTML(party.name)}
+                                    </strong>
+
+                                    <span>
+                                        ${party.votes}
+                                        (${percentage.toFixed(1)}%)
+                                    </span>
+
+                                </div>
+
+
+                                <div
+                                    style="
+                                        height:18px;
+                                        background:#edf0f4;
+                                        border-radius:10px;
+                                        overflow:hidden;
+                                    "
+                                >
+
+                                    <div
+                                        style="
+                                            width:${percentage}%;
+                                            height:100%;
+                                            background:#0756a5;
+                                        "
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }).join("")}
+
+                </div>
+
+            `;
+
+        }).join("")}
+
+    `;
+
+}
+
+
+/* =====================================================
+   COMPROBANTES ADMIN
+===================================================== */
+
+function renderComprobantes(content){
+
+    content.innerHTML = `
+
+        <div class="page-header">
+
+            <h2>
+                Comprobantes
+            </h2>
+
+            <p>
+                Todos los votos registrados.
+            </p>
+
+        </div>
+
+
+        <div class="panel">
+
+            ${
+                database.receipts.length === 0
+
+                ? `
+
+                    <div class="empty">
+
+                        <div class="empty-icon">
+                            🧾
+                        </div>
+
+                        <h3>
+                            No hay comprobantes
+                        </h3>
+
+                        <p>
+                            Todavía no se han registrado votos.
+                        </p>
+
+                    </div>
+
+                `
+
+                : `
+
+                    ${database.receipts.map(function(receipt){
+
+                        return `
+
+                            <div
+                                style="
+                                    padding:15px;
+                                    border-bottom:1px solid #e2e6ec;
+                                "
+                            >
+
+                                <strong>
+                                    #${receipt.number}
+                                </strong>
+
+                                <span style="margin-left:15px">
+                                    ${escapeHTML(receipt.voter)}
+                                </span>
+
+                                <span style="margin-left:15px">
+                                    ${escapeHTML(receipt.party)}
+                                </span>
+
+                                <span style="margin-left:15px;color:#68758a">
+                                    ${formatDate(receipt.date)}
+                                </span>
+
+                            </div>
+
+                        `;
+
+                    }).join("")}
+
+                `
+
+            }
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   VOTANTES
+===================================================== */
+
+function renderVotantes(content){
+
+    const voters =
+        Object.keys(USERS).filter(
+            function(username){
+
+                return USERS[username].role === "voter";
+
+            }
+        );
+
+
+    const active =
+        database.elections.find(
+            function(election){
+
+                return election.status === "active";
+
+            }
+        );
+
+
+    content.innerHTML = `
+
+        <div class="page-header">
+
+            <h2>
+                Votantes
+            </h2>
+
+            <p>
+                Estado de participación.
+            </p>
+
+        </div>
+
+
+        <div class="panel">
+
+            ${voters.map(function(username){
+
+                const user =
+                    USERS[username];
+
+
+                const voted =
+                    active &&
+                    active.votedUsers.includes(
+                        username
+                    );
+
+
+                return `
+
+                    <div
+                        style="
+                            padding:15px;
+                            border-bottom:1px solid #e2e6ec;
+                            display:flex;
+                            justify-content:space-between;
+                        "
+                    >
+
+                        <span>
+                            <strong>
+                                ${escapeHTML(user.name)}
+                            </strong>
+
+                            <small style="color:#68758a">
+                                ${escapeHTML(username)}
+                            </small>
+                        </span>
+
+
+                        <span>
+
+                            ${
+                                active
+
+                                ? voted
+                                    ? "✓ Votó"
+                                    : "Pendiente"
+
+                                : "Sin elección activa"
+                            }
+
+                        </span>
+
+                    </div>
+
+                `;
+
+            }).join("")}
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   HISTORIAL
+===================================================== */
+
+function renderHistorial(content){
+
+    const finished =
+        database.elections.filter(
+            function(election){
+
+                return election.status === "finished";
+
+            }
+        );
+
+
+    content.innerHTML = `
+
+        <div class="page-header">
+
+            <h2>
+                Historial
+            </h2>
+
+            <p>
+                Elecciones finalizadas.
+            </p>
+
+        </div>
+
+
+        <div class="panel">
+
+            ${
+                finished.length === 0
+
+                ? `
+
+                    <div class="empty">
+
+                        <div class="empty-icon">
+                            🕘
+                        </div>
+
+                        <h3>
+                            No hay elecciones finalizadas
+                        </h3>
+
+                    </div>
+
+                `
+
+                : finished.map(function(election){
+
+                    return `
+
+                        <div class="election">
+
+                            <h3>
+                                ${escapeHTML(election.name)}
+                            </h3>
+
+                            <p style="margin-top:8px">
+                                ${getTotalVotes(election)} votos
+                            </p>
+
+                            <p style="margin-top:8px">
+                                Ganador:
+                                <strong>
+                                    ${escapeHTML(
+                                        getWinner(election)
+                                    )}
+                                </strong>
+                            </p>
+
+                        </div>
+
+                    `;
+
+                }).join("")
+
+            }
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   FUNCIONES AUXILIARES
+===================================================== */
+
+function getTotalVotes(election){
+
+    return election.parties.reduce(
+        function(total,party){
+
+            return total +
+                Number(party.votes || 0);
+
+        },
+        0
+    );
+
+}
+
+
+function getWinner(election){
+
+    if(getTotalVotes(election) === 0){
+
+        return "Sin votos";
+
+    }
+
+
+    let winner =
+        election.parties[0];
+
+
+    election.parties.forEach(
+        function(party){
+
+            if(
+                party.votes >
+                winner.votes
+            ){
+
+                winner = party;
+
+            }
+
+        }
+    );
+
+
+    return winner.name +
+        (
+            winner.candidate
+            ? " — " + winner.candidate
+            : ""
+        );
+
+}
+
+
+function statusHTML(status){
+
+    const labels = {
+
+        draft:"Borrador",
+
+        active:"Activa",
+
+        paused:"Pausada",
+
+        finished:"Finalizada"
+
+    };
+
+
+    return `
+
+        <span class="status ${status}">
+            ${labels[status] || status}
+        </span>
+
+    `;
+
+}
+
+
+function formatDate(date){
+
+    if(!date){
+        return "—";
+    }
+
+
+    try{
+
+        return new Date(date)
+        .toLocaleString(
+            "es-VE",
+            {
+                day:"2-digit",
+                month:"2-digit",
+                year:"numeric",
+                hour:"2-digit",
+                minute:"2-digit"
+            }
+        );
+
+    }catch(error){
+
+        return date;
+
+    }
+
+}
+
+
+function escapeHTML(value){
+
+    return String(value || "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =====================================================
+   ESTADO INICIAL
+===================================================== */
+
+document
+.getElementById("loginScreen")
+.style.display = "flex";
+
+
+document
+.getElementById("app")
+.style.display = "none";
+
+</script>
+
+</body>
+</html>
