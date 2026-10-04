@@ -1,1 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elecciones Familiares</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 
+<body>
+
+<div id="app">
+
+    <!-- LOGIN -->
+    <section id="loginScreen" class="screen login-screen">
+        <div class="login-card">
+
+            <div class="brand">
+                <div class="brand-symbol">EF</div>
+                <h1>Elecciones Familiares</h1>
+                <p>Sistema de votación familiar</p>
+            </div>
+
+            <form id="loginForm">
+                <label for="username">Usuario</label>
+                <input
+                    id="username"
+                    type="text"
+                    placeholder="Ingresa tu usuario"
+                    autocomplete="username"
+                    required
+                >
+
+                <label for="password">Contraseña</label>
+                <input
+                    id="password"
+                    type="password"
+                    placeholder="Ingresa tu contraseña"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <button class="primary-btn" type="submit">
+                    Ingresar
+                </button>
+
+                <p id="loginError" class="error-message"></p>
+            </form>
+
+            <div class="login-info">
+                <span>🔐</span>
+                <span>Acceso autorizado</span>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- VOTANTE -->
+    <section id="voterScreen" class="screen hidden">
+
+        <header class="topbar">
+            <div>
+                <span class="small-title">ELECCIONES FAMILIARES</span>
+                <h2 id="voterElectionName">Sin elección activa</h2>
+            </div>
+
+            <div class="topbar-right">
+                <span id="voterUserBadge" class="user-badge"></span>
+                <button class="logout-btn" onclick="logout()">Salir</button>
+            </div>
+        </header>
+
+        <main class="main-content">
+
+            <div id="voterWaiting" class="panel">
+                <div class="empty-icon">⏳</div>
+                <h2>No hay una elección activa</h2>
+                <p>Gestión todavía no ha activado una elección.</p>
+            </div>
+
+            <div id="votingArea" class="hidden">
+
+                <div class="election-header">
+                    <span class="status-badge active">● ELECCIÓN ACTIVA</span>
+                    <h1 id="voterElectionTitle"></h1>
+                    <p>Selecciona el partido de tu preferencia.</p>
+                </div>
+
+                <div id="partyGrid" class="party-grid"></div>
+
+                <div class="vote-footer">
+                    <button id="confirmVoteBtn" class="primary-btn disabled" disabled>
+                        Confirmar voto
+                    </button>
+                </div>
+
+            </div>
+
+            <div id="alreadyVoted" class="panel hidden">
+                <div class="success-icon">✓</div>
+                <h2>Tu voto ya fue registrado</h2>
+                <p>Esta cuenta ya participó en la elección actual.</p>
+
+                <button id="viewReceiptBtn" class="secondary-btn">
+                    Ver mi comprobante
+                </button>
+            </div>
+
+        </main>
+    </section>
+
+
+    <!-- GESTIÓN -->
+    <section id="managementScreen" class="screen hidden">
+
+        <header class="topbar">
+            <div>
+                <span class="small-title">PANEL ADMINISTRATIVO</span>
+                <h2>Gestión</h2>
+            </div>
+
+            <div class="topbar-right">
+                <span class="admin-badge">ADMINISTRADOR</span>
+                <button class="logout-btn" onclick="logout()">Salir</button>
+            </div>
+        </header>
+
+        <main class="main-content">
+
+            <!-- ELECCIÓN -->
+            <section class="panel management-panel">
+
+                <div class="panel-title">
+                    <div>
+                        <span class="section-label">CONTROL ELECTORAL</span>
+                        <h2>Elección</h2>
+                    </div>
+
+                    <span id="managementStatus" class="status-badge inactive">
+                        ● NO INICIADA
+                    </span>
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="field">
+                        <label>Nombre de la elección</label>
+                        <input
+                            id="electionNameInput"
+                            type="text"
+                            placeholder="Ej. Elección de Vehículo 2026"
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label>Descripción</label>
+                        <input
+                            id="electionDescriptionInput"
+                            type="text"
+                            placeholder="Descripción de la elección"
+                        >
+                    </div>
+
+                </div>
+
+                <div class="management-buttons">
+                    <button class="primary-btn" onclick="createElection()">
+                        + Crear elección
+                    </button>
+
+                    <button class="success-btn" onclick="activateElection()">
+                        ▶ Activar
+                    </button>
+
+                    <button class="warning-btn" onclick="finishElection()">
+                        ■ Finalizar
+                    </button>
+
+                    <button class="danger-btn" onclick="deleteElection()">
+                        🗑 Eliminar
+                    </button>
+                </div>
+
+            </section>
+
+
+            <!-- CANDIDATOS -->
+            <section class="panel">
+
+                <div class="panel-title">
+                    <div>
+                        <span class="section-label">CONFIGURACIÓN</span>
+                        <h2>Partidos y candidatos</h2>
+                    </div>
+                </div>
+
+                <p class="muted">
+                    Gestión puede asignar un candidato diferente a cada partido
+                    para cada elección.
+                </p>
+
+                <div id="candidateManagement" class="candidate-management"></div>
+
+                <button class="primary-btn" onclick="saveCandidates()">
+                    Guardar candidatos
+                </button>
+
+            </section>
+
+
+            <!-- ESTADÍSTICAS -->
+            <section class="stats-grid">
+
+                <div class="stat-card">
+                    <span class="stat-icon">👥</span>
+                    <span class="stat-label">VOTANTES</span>
+                    <strong id="totalVoters">6</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-icon">🗳️</span>
+                    <span class="stat-label">VOTOS EMITIDOS</span>
+                    <strong id="totalVotes">0</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-icon">⏳</span>
+                    <span class="stat-label">PENDIENTES</span>
+                    <strong id="pendingVotes">6</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-icon">📈</span>
+                    <span class="stat-label">PARTICIPACIÓN</span>
+                    <strong id="participation">0%</strong>
+                </div>
+
+            </section>
+
+
+            <!-- GRÁFICO -->
+            <section class="panel">
+
+                <div class="panel-title">
+                    <div>
+                        <span class="section-label">RESULTADOS</span>
+                        <h2>Votos por partido</h2>
+                    </div>
+                </div>
+
+                <div id="resultsChart" class="results-chart"></div>
+
+            </section>
+
+
+            <!-- VOTANTES -->
+            <section class="panel">
+
+                <div class="panel-title">
+                    <div>
+                        <span class="section-label">PARTICIPACIÓN</span>
+                        <h2>Estado de los votantes</h2>
+                    </div>
+                </div>
+
+                <div id="voterStatusList" class="voter-status-list"></div>
+
+            </section>
+
+
+            <!-- COMPROBANTES -->
+            <section class="panel">
+
+                <div class="panel-title">
+                    <div>
+                        <span class="section-label">REGISTRO</span>
+                        <h2>Comprobantes</h2>
+                    </div>
+
+                    <span id="receiptCount" class="count-badge">0</span>
+                </div>
+
+                <div id="receiptList" class="receipt-list"></div>
+
+            </section>
+
+        </main>
+    </section>
+
+
+    <!-- MODAL COMPROBANTE -->
+    <div id="receiptModal" class="modal hidden">
+
+        <div class="receipt-card">
+
+            <button class="close-modal" onclick="closeReceipt()">
+                ×
+            </button>
+
+            <div class="receipt-header">
+                <div class="receipt-logo">EF</div>
+
+                <div>
+                    <span>ELECCIONES FAMILIARES</span>
+                    <h2 id="receiptElectionName"></h2>
+                </div>
+            </div>
+
+            <div class="receipt-divider"></div>
+
+            <div class="receipt-number">
+                <span>COMPROBANTE</span>
+                <strong id="receiptNumber"></strong>
+            </div>
+
+            <div class="receipt-data">
+
+                <div>
+                    <span>VOTANTE</span>
+                    <strong id="receiptVoter"></strong>
+                </div>
+
+                <div>
+                    <span>PARTIDO</span>
+                    <strong id="receiptParty"></strong>
+                </div>
+
+                <div>
+                    <span>FECHA</span>
+                    <strong id="receiptDate"></strong>
+                </div>
+
+                <div>
+                    <span>HORA</span>
+                    <strong id="receiptTime"></strong>
+                </div>
+
+            </div>
+
+            <div class="receipt-confirmed">
+                ✓ VOTO REGISTRADO
+            </div>
+
+            <p class="receipt-note">
+                Este comprobante confirma el registro del voto.
+            </p>
+
+        </div>
+    </div>
+
+
+    <!-- CONFIRMACIÓN -->
+    <div id="confirmModal" class="modal hidden">
+
+        <div class="confirm-card">
+
+            <div class="confirm-icon">🗳️</div>
+
+            <h2>Confirmar voto</h2>
+
+            <p>
+                Estás a punto de registrar tu voto por:
+            </p>
+
+            <strong id="selectedPartyName"></strong>
+
+            <p class="warning-text">
+                Una vez confirmado, no podrás cambiar tu voto.
+            </p>
+
+            <div class="confirm-buttons">
+                <button class="secondary-btn" onclick="closeConfirmModal()">
+                    Cancelar
+                </button>
+
+                <button class="primary-btn" onclick="submitVote()">
+                    Confirmar voto
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
