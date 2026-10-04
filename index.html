@@ -1,389 +1,3041 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elecciones Familiares</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CFE — Consejo Familiar Electoral</title>
+
+<style>
+:root{
+    --blue:#0757a0;
+    --blue-dark:#063b70;
+    --blue-light:#eaf3fb;
+    --gold:#d9a928;
+    --white:#ffffff;
+    --gray:#64748b;
+    --light:#f4f7fb;
+    --border:#dce4ee;
+    --green:#159447;
+    --red:#c93636;
+    --shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:var(--light);
+    color:#172033;
+}
+
+button,
+input,
+textarea,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* LOGIN */
+
+#loginPage{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:25px;
+    background:
+        linear-gradient(135deg,#063b70,#0871c9);
+}
+
+.login-box{
+    width:100%;
+    max-width:430px;
+    background:white;
+    border-radius:20px;
+    padding:35px;
+    box-shadow:0 20px 50px rgba(0,0,0,.2);
+}
+
+.logo-cfe{
+    width:70px;
+    height:70px;
+    border-radius:16px;
+    background:linear-gradient(135deg,var(--blue),#0b75ce);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    font-size:24px;
+    margin:0 auto 18px;
+    border-bottom:5px solid var(--gold);
+}
+
+.login-box h1{
+    text-align:center;
+    margin:0;
+    font-size:25px;
+}
+
+.login-box p{
+    text-align:center;
+    color:var(--gray);
+}
+
+.form-group{
+    margin-bottom:16px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:7px;
+    font-weight:bold;
+    font-size:14px;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    padding:12px 13px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:white;
+    outline:none;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    border-color:var(--blue);
+}
+
+textarea{
+    min-height:100px;
+    resize:vertical;
+}
+
+.primary{
+    background:var(--blue);
+    color:white;
+    border:0;
+    border-radius:10px;
+    padding:12px 18px;
+    font-weight:bold;
+}
+
+.primary:hover{
+    background:var(--blue-dark);
+}
+
+.secondary{
+    background:white;
+    color:var(--blue);
+    border:1px solid var(--blue);
+    border-radius:10px;
+    padding:11px 17px;
+    font-weight:bold;
+}
+
+.danger{
+    background:var(--red);
+    color:white;
+    border:0;
+    border-radius:10px;
+    padding:11px 17px;
+    font-weight:bold;
+}
+
+.success{
+    background:var(--green);
+    color:white;
+    border:0;
+    border-radius:10px;
+    padding:11px 17px;
+    font-weight:bold;
+}
+
+/* APP */
+
+#app{
+    min-height:100vh;
+}
+
+.topbar{
+    height:68px;
+    background:white;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 25px;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-weight:bold;
+    color:var(--blue);
+}
+
+.brand-mark{
+    width:42px;
+    height:42px;
+    border-radius:10px;
+    background:var(--blue);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-bottom:3px solid var(--gold);
+}
+
+.top-actions{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.user-pill{
+    background:var(--blue-light);
+    color:var(--blue);
+    border-radius:30px;
+    padding:9px 14px;
+    font-weight:bold;
+}
+
+.logout{
+    border:0;
+    background:#eef1f5;
+    padding:9px 13px;
+    border-radius:9px;
+}
+
+/* LAYOUT */
+
+.layout{
+    display:flex;
+    min-height:calc(100vh - 68px);
+}
+
+.sidebar{
+    width:245px;
+    background:#fff;
+    border-right:1px solid var(--border);
+    padding:20px 14px;
+}
+
+.sidebar button{
+    width:100%;
+    border:0;
+    background:transparent;
+    text-align:left;
+    padding:13px;
+    border-radius:9px;
+    margin-bottom:5px;
+    color:#344054;
+}
+
+.sidebar button:hover,
+.sidebar button.active{
+    background:var(--blue-light);
+    color:var(--blue);
+    font-weight:bold;
+}
+
+.main{
+    flex:1;
+    padding:28px;
+    max-width:1500px;
+}
+
+.page-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.page-title h2{
+    margin:0;
+}
+
+.card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:22px;
+    box-shadow:0 3px 10px rgba(0,0,0,.025);
+    margin-bottom:20px;
+}
+
+.empty{
+    text-align:center;
+    padding:65px 25px;
+}
+
+.empty-icon{
+    font-size:45px;
+    margin-bottom:10px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:18px;
+}
+
+.stat{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:20px;
+}
+
+.stat small{
+    color:var(--gray);
+}
+
+.stat strong{
+    display:block;
+    font-size:30px;
+    margin-top:7px;
+    color:var(--blue);
+}
+
+/* ELECTION */
+
+.election-header{
+    display:flex;
+    gap:20px;
+    align-items:center;
+}
+
+.cover{
+    width:130px;
+    height:90px;
+    border-radius:12px;
+    object-fit:cover;
+    background:#edf2f7;
+}
+
+.status{
+    display:inline-block;
+    border-radius:20px;
+    padding:6px 11px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.status.draft{
+    background:#fff3cd;
+    color:#886b00;
+}
+
+.status.active{
+    background:#dff5e7;
+    color:#087c35;
+}
+
+.status.paused{
+    background:#e9edf2;
+    color:#526170;
+}
+
+.status.finished{
+    background:#e7e7e7;
+    color:#555;
+}
+
+/* PARTY FORM */
+
+.party-editor{
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:18px;
+    margin-bottom:15px;
+}
+
+.party-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.party-name{
+    font-weight:bold;
+    color:var(--blue);
+    font-size:18px;
+}
+
+.upload-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.preview{
+    margin-top:10px;
+    width:100%;
+    height:150px;
+    object-fit:contain;
+    border:1px dashed #cbd5e1;
+    border-radius:10px;
+    background:#f8fafc;
+}
+
+.preview.logo{
+    height:110px;
+}
+
+/* BALLOT */
+
+.ballot-wrapper{
+    background:#eef3f8;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:18px;
+    overflow:auto;
+}
+
+.ballot{
+    position:relative;
+    min-width:760px;
+    width:100%;
+    height:650px;
+    background:white;
+    border:5px solid var(--blue);
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.ballot-title{
+    position:absolute;
+    left:20px;
+    top:15px;
+    font-weight:bold;
+    color:var(--blue);
+    font-size:18px;
+}
+
+.ballot-subtitle{
+    position:absolute;
+    left:20px;
+    top:42px;
+    color:#667085;
+    font-size:13px;
+}
+
+.ballot-card{
+    position:absolute;
+    width:210px;
+    min-height:245px;
+    background:white;
+    border:2px solid #d7e0ea;
+    border-radius:14px;
+    padding:13px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+    user-select:none;
+}
+
+.ballot-card.selected{
+    border:3px solid var(--gold);
+    box-shadow:0 0 0 4px rgba(217,169,40,.18);
+}
+
+.ballot-card .party-logo{
+    width:50px;
+    height:50px;
+    object-fit:contain;
+    display:block;
+    margin:auto;
+}
+
+.ballot-card .candidate-photo{
+    width:80px;
+    height:80px;
+    object-fit:cover;
+    border-radius:50%;
+    display:block;
+    margin:9px auto;
+    border:3px solid #e4eaf0;
+}
+
+.ballot-card h4{
+    margin:5px 0;
+    text-align:center;
+    color:var(--blue);
+}
+
+.ballot-card .candidate-desc{
+    font-size:11px;
+    color:#667085;
+    text-align:center;
+    line-height:1.35;
+    max-height:58px;
+    overflow:hidden;
+}
+
+.ballot-card .select-ballot{
+    display:block;
+    margin:10px auto 0;
+    background:var(--blue);
+    color:white;
+    border:0;
+    padding:7px 12px;
+    border-radius:8px;
+    font-size:12px;
+}
+
+/* MANAGEMENT DRAG */
+
+.drag-card{
+    cursor:grab;
+}
+
+.drag-card:active{
+    cursor:grabbing;
+}
+
+.editor-ballot .ballot-card{
+    cursor:move;
+}
+
+.position-help{
+    background:#f0f7ff;
+    color:#15538b;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:15px;
+    font-size:14px;
+}
+
+/* RECEIPT */
+
+.receipt{
+    max-width:650px;
+    margin:auto;
+    background:white;
+    border-radius:15px;
+    overflow:hidden;
+    border:1px solid var(--border);
+}
+
+.receipt-header{
+    background:linear-gradient(135deg,var(--blue),#0a73ca);
+    color:white;
+    padding:22px;
+    border-bottom:5px solid var(--gold);
+}
+
+.receipt-body{
+    padding:24px;
+}
+
+.receipt-number{
+    font-size:30px;
+    font-weight:bold;
+    color:var(--blue);
+}
+
+/* MOBILE */
+
+@media(max-width:800px){
+
+    .topbar{
+        padding:0 14px;
+    }
+
+    .brand-text{
+        display:none;
+    }
+
+    .layout{
+        display:block;
+    }
+
+    .sidebar{
+        width:100%;
+        display:flex;
+        overflow-x:auto;
+        border-right:0;
+        border-bottom:1px solid var(--border);
+        padding:8px;
+    }
+
+    .sidebar button{
+        min-width:max-content;
+        margin:0 4px;
+    }
+
+    .main{
+        padding:17px;
+    }
+
+    .page-title{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .upload-grid{
+        grid-template-columns:1fr;
+    }
+
+    .election-header{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .ballot{
+        min-width:0;
+        width:100%;
+        height:950px;
+    }
+
+    .ballot-card{
+        width:42%;
+    }
+}
+
+@media(max-width:520px){
+
+    .top-actions .user-pill{
+        display:none;
+    }
+
+    .topbar{
+        height:60px;
+    }
+
+    .main{
+        padding:12px;
+    }
+
+    .card{
+        padding:16px;
+    }
+
+    .ballot{
+        height:1250px;
+    }
+
+    .ballot-card{
+        width:80%;
+        left:10%!important;
+    }
+
+    .ballot-card:nth-of-type(1){
+        top:90px!important;
+    }
+
+    .ballot-card:nth-of-type(2){
+        top:330px!important;
+    }
+
+    .ballot-card:nth-of-type(3){
+        top:570px!important;
+    }
+
+    .ballot-card:nth-of-type(4){
+        top:810px!important;
+    }
+
+    .ballot-card:nth-of-type(5){
+        top:1050px!important;
+    }
+}
+</style>
 </head>
 
 <body>
 
-<div id="app">
+<!-- LOGIN -->
+<section id="loginPage">
 
-    <!-- LOGIN -->
-    <section id="loginScreen" class="screen login-screen">
-        <div class="login-card">
+    <div class="login-box">
 
-            <div class="brand">
-                <div class="brand-symbol">EF</div>
-                <h1>Elecciones Familiares</h1>
-                <p>Sistema de votación familiar</p>
-            </div>
+        <div class="logo-cfe">CFE</div>
 
-            <form id="loginForm">
-                <label for="username">Usuario</label>
-                <input
-                    id="username"
-                    type="text"
-                    placeholder="Ingresa tu usuario"
-                    autocomplete="username"
-                    required
-                >
+        <h1>Consejo Familiar Electoral</h1>
 
-                <label for="password">Contraseña</label>
-                <input
-                    id="password"
-                    type="password"
-                    placeholder="Ingresa tu contraseña"
-                    autocomplete="current-password"
-                    required
-                >
+        <p>Portal de participación familiar</p>
 
-                <button class="primary-btn" type="submit">
-                    Ingresar
-                </button>
-
-                <p id="loginError" class="error-message"></p>
-            </form>
-
-            <div class="login-info">
-                <span>🔐</span>
-                <span>Acceso autorizado</span>
-            </div>
+        <div class="form-group">
+            <label>Usuario</label>
+            <input id="loginUser" autocomplete="username" placeholder="Ingrese su usuario">
         </div>
-    </section>
-
-
-    <!-- VOTANTE -->
-    <section id="voterScreen" class="screen hidden">
-
-        <header class="topbar">
-            <div>
-                <span class="small-title">ELECCIONES FAMILIARES</span>
-                <h2 id="voterElectionName">Sin elección activa</h2>
-            </div>
-
-            <div class="topbar-right">
-                <span id="voterUserBadge" class="user-badge"></span>
-                <button class="logout-btn" onclick="logout()">Salir</button>
-            </div>
-        </header>
-
-        <main class="main-content">
-
-            <div id="voterWaiting" class="panel">
-                <div class="empty-icon">⏳</div>
-                <h2>No hay una elección activa</h2>
-                <p>Gestión todavía no ha activado una elección.</p>
-            </div>
-
-            <div id="votingArea" class="hidden">
-
-                <div class="election-header">
-                    <span class="status-badge active">● ELECCIÓN ACTIVA</span>
-                    <h1 id="voterElectionTitle"></h1>
-                    <p>Selecciona el partido de tu preferencia.</p>
-                </div>
-
-                <div id="partyGrid" class="party-grid"></div>
 
-                <div class="vote-footer">
-                    <button id="confirmVoteBtn" class="primary-btn disabled" disabled>
-                        Confirmar voto
-                    </button>
-                </div>
-
-            </div>
-
-            <div id="alreadyVoted" class="panel hidden">
-                <div class="success-icon">✓</div>
-                <h2>Tu voto ya fue registrado</h2>
-                <p>Esta cuenta ya participó en la elección actual.</p>
-
-                <button id="viewReceiptBtn" class="secondary-btn">
-                    Ver mi comprobante
-                </button>
-            </div>
-
-        </main>
-    </section>
+        <div class="form-group">
+            <label>Contraseña</label>
+            <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Ingrese su contraseña">
+        </div>
 
+        <button class="primary" style="width:100%" onclick="login()">
+            Ingresar
+        </button>
 
-    <!-- GESTIÓN -->
-    <section id="managementScreen" class="screen hidden">
+        <p id="loginError" style="color:#c93636;font-weight:bold;"></p>
 
-        <header class="topbar">
-            <div>
-                <span class="small-title">PANEL ADMINISTRATIVO</span>
-                <h2>Gestión</h2>
-            </div>
+    </div>
 
-            <div class="topbar-right">
-                <span class="admin-badge">ADMINISTRADOR</span>
-                <button class="logout-btn" onclick="logout()">Salir</button>
-            </div>
-        </header>
+</section>
 
-        <main class="main-content">
-
-            <!-- ELECCIÓN -->
-            <section class="panel management-panel">
-
-                <div class="panel-title">
-                    <div>
-                        <span class="section-label">CONTROL ELECTORAL</span>
-                        <h2>Elección</h2>
-                    </div>
-
-                    <span id="managementStatus" class="status-badge inactive">
-                        ● NO INICIADA
-                    </span>
-                </div>
 
-                <div class="form-grid">
+<!-- APP -->
+<section id="app" class="hidden">
 
-                    <div class="field">
-                        <label>Nombre de la elección</label>
-                        <input
-                            id="electionNameInput"
-                            type="text"
-                            placeholder="Ej. Elección de Vehículo 2026"
-                        >
-                    </div>
+    <header class="topbar">
 
-                    <div class="field">
-                        <label>Descripción</label>
-                        <input
-                            id="electionDescriptionInput"
-                            type="text"
-                            placeholder="Descripción de la elección"
-                        >
-                    </div>
+        <div class="brand">
+            <div class="brand-mark">CFE</div>
+            <span class="brand-text">
+                Consejo Familiar Electoral
+            </span>
+        </div>
 
-                </div>
+        <div class="top-actions">
+            <span class="user-pill" id="currentUser"></span>
+            <button class="logout" onclick="logout()">Salir</button>
+        </div>
 
-                <div class="management-buttons">
-                    <button class="primary-btn" onclick="createElection()">
-                        + Crear elección
-                    </button>
+    </header>
 
-                    <button class="success-btn" onclick="activateElection()">
-                        ▶ Activar
-                    </button>
+    <div class="layout">
 
-                    <button class="warning-btn" onclick="finishElection()">
-                        ■ Finalizar
-                    </button>
+        <aside class="sidebar" id="sidebar"></aside>
 
-                    <button class="danger-btn" onclick="deleteElection()">
-                        🗑 Eliminar
-                    </button>
-                </div>
+        <main class="main" id="mainContent"></main>
 
-            </section>
+    </div>
 
+</section>
 
-            <!-- CANDIDATOS -->
-            <section class="panel">
 
-                <div class="panel-title">
-                    <div>
-                        <span class="section-label">CONFIGURACIÓN</span>
-                        <h2>Partidos y candidatos</h2>
-                    </div>
-                </div>
+<script>
 
-                <p class="muted">
-                    Gestión puede asignar un candidato diferente a cada partido
-                    para cada elección.
-                </p>
+/* =========================================================
+   CONFIGURACIÓN
+========================================================= */
 
-                <div id="candidateManagement" class="candidate-management"></div>
+const USERS = {
 
-                <button class="primary-btn" onclick="saveCandidates()">
-                    Guardar candidatos
-                </button>
+    VOriana:{
+        password:"VO1",
+        name:"Oriana",
+        role:"voter"
+    },
 
-            </section>
+    VLeonel:{
+        password:"VL1",
+        name:"Leonel",
+        role:"voter"
+    },
 
+    VZoraida:{
+        password:"VZ1",
+        name:"Zoraida",
+        role:"voter"
+    },
 
-            <!-- ESTADÍSTICAS -->
-            <section class="stats-grid">
+    VArianny:{
+        password:"VA1",
+        name:"Arianny",
+        role:"voter"
+    },
 
-                <div class="stat-card">
-                    <span class="stat-icon">👥</span>
-                    <span class="stat-label">VOTANTES</span>
-                    <strong id="totalVoters">6</strong>
-                </div>
+    VEfren:{
+        password:"VE1",
+        name:"Efrén",
+        role:"voter"
+    },
 
-                <div class="stat-card">
-                    <span class="stat-icon">🗳️</span>
-                    <span class="stat-label">VOTOS EMITIDOS</span>
-                    <strong id="totalVotes">0</strong>
-                </div>
+    VPablo:{
+        password:"VP1",
+        name:"Pablo",
+        role:"voter"
+    },
 
-                <div class="stat-card">
-                    <span class="stat-icon">⏳</span>
-                    <span class="stat-label">PENDIENTES</span>
-                    <strong id="pendingVotes">6</strong>
-                </div>
+    Gestión:{
+        password:"G34",
+        name:"Gestión",
+        role:"admin"
+    }
+};
 
-                <div class="stat-card">
-                    <span class="stat-icon">📈</span>
-                    <span class="stat-label">PARTICIPACIÓN</span>
-                    <strong id="participation">0%</strong>
-                </div>
 
-            </section>
+const PARTIES = [
 
+    {
+        id:"enmienda",
+        name:"Enmienda Sí"
+    },
 
-            <!-- GRÁFICO -->
-            <section class="panel">
+    {
+        id:"contrario",
+        name:"Partido Contrario"
+    },
 
-                <div class="panel-title">
-                    <div>
-                        <span class="section-label">RESULTADOS</span>
-                        <h2>Votos por partido</h2>
-                    </div>
-                </div>
+    {
+        id:"partidoH",
+        name:"Partido H"
+    },
 
-                <div id="resultsChart" class="results-chart"></div>
+    {
+        id:"cambio",
+        name:"Un Cambio Significativo"
+    },
 
-            </section>
+    {
+        id:"convivir",
+        name:"Convivir"
+    }
 
+];
 
-            <!-- VOTANTES -->
-            <section class="panel">
 
-                <div class="panel-title">
-                    <div>
-                        <span class="section-label">PARTICIPACIÓN</span>
-                        <h2>Estado de los votantes</h2>
-                    </div>
-                </div>
+/* =========================================================
+   STORAGE
+========================================================= */
 
-                <div id="voterStatusList" class="voter-status-list"></div>
+function getData(){
 
-            </section>
+    const data = localStorage.getItem("CFE_DATA");
 
+    if(data){
+        return JSON.parse(data);
+    }
 
-            <!-- COMPROBANTES -->
-            <section class="panel">
+    return {
+        elections:[],
+        receipts:[],
+        receiptCounter:0
+    };
+}
 
-                <div class="panel-title">
-                    <div>
-                        <span class="section-label">REGISTRO</span>
-                        <h2>Comprobantes</h2>
-                    </div>
 
-                    <span id="receiptCount" class="count-badge">0</span>
-                </div>
+function saveData(data){
 
-                <div id="receiptList" class="receipt-list"></div>
+    localStorage.setItem(
+        "CFE_DATA",
+        JSON.stringify(data)
+    );
+}
 
-            </section>
 
-        </main>
-    </section>
+/* =========================================================
+   SESIÓN
+========================================================= */
 
+let currentUser = null;
+let currentView = "home";
+let editingElectionId = null;
 
-    <!-- MODAL COMPROBANTE -->
-    <div id="receiptModal" class="modal hidden">
 
-        <div class="receipt-card">
+function login(){
 
-            <button class="close-modal" onclick="closeReceipt()">
-                ×
+    const user =
+        document.getElementById("loginUser").value.trim();
+
+    const password =
+        document.getElementById("loginPassword").value;
+
+    const account = USERS[user];
+
+    if(!account || account.password !== password){
+
+        document.getElementById("loginError").textContent =
+            "Usuario o contraseña incorrectos.";
+
+        return;
+    }
+
+    currentUser = {
+        username:user,
+        ...account
+    };
+
+    document.getElementById("loginPage")
+        .classList.add("hidden");
+
+    document.getElementById("app")
+        .classList.remove("hidden");
+
+    document.getElementById("currentUser")
+        .textContent = currentUser.name;
+
+    buildSidebar();
+
+    render();
+
+}
+
+
+function logout(){
+
+    currentUser = null;
+
+    document.getElementById("app")
+        .classList.add("hidden");
+
+    document.getElementById("loginPage")
+        .classList.remove("hidden");
+
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+function buildSidebar(){
+
+    const sidebar =
+        document.getElementById("sidebar");
+
+    if(currentUser.role === "admin"){
+
+        sidebar.innerHTML = `
+
+            <button onclick="go('home')">
+                🏠 Inicio
             </button>
 
+            <button onclick="go('elections')">
+                🗳️ Elecciones
+            </button>
+
+            <button onclick="go('create')">
+                ＋ Nueva elección
+            </button>
+
+            <button onclick="go('results')">
+                📊 Resultados
+            </button>
+
+            <button onclick="go('receipts')">
+                🧾 Comprobantes
+            </button>
+
+            <button onclick="go('voters')">
+                👥 Votantes
+            </button>
+
+        `;
+
+    }else{
+
+        sidebar.innerHTML = `
+
+            <button onclick="go('home')">
+                🏠 Inicio
+            </button>
+
+            <button onclick="go('vote')">
+                🗳️ Elección
+            </button>
+
+            <button onclick="go('myreceipt')">
+                🧾 Mi comprobante
+            </button>
+
+        `;
+    }
+}
+
+
+function go(view){
+
+    currentView = view;
+
+    render();
+}
+
+
+/* =========================================================
+   RENDER PRINCIPAL
+========================================================= */
+
+function render(){
+
+    const main =
+        document.getElementById("mainContent");
+
+    if(currentUser.role === "admin"){
+
+        renderAdmin(main);
+
+    }else{
+
+        renderVoter(main);
+
+    }
+
+}
+
+
+/* =========================================================
+   ADMIN
+========================================================= */
+
+function renderAdmin(main){
+
+    if(currentView === "home"){
+
+        const data = getData();
+
+        const active =
+            data.elections.find(e => e.status === "active");
+
+        main.innerHTML = `
+
+            <div class="page-title">
+
+                <div>
+                    <h2>Inicio</h2>
+                    <p style="color:#64748b">
+                        Panel de Gestión del CFE
+                    </p>
+                </div>
+
+                <button class="primary"
+                    onclick="go('create')">
+                    + Nueva elección
+                </button>
+
+            </div>
+
+            <div class="grid">
+
+                <div class="stat">
+                    <small>Elecciones creadas</small>
+                    <strong>${data.elections.length}</strong>
+                </div>
+
+                <div class="stat">
+                    <small>Elección activa</small>
+                    <strong>${active ? "1" : "0"}</strong>
+                </div>
+
+                <div class="stat">
+                    <small>Votos emitidos</small>
+                    <strong>${data.receipts.length}</strong>
+                </div>
+
+                <div class="stat">
+                    <small>Comprobantes</small>
+                    <strong>${data.receipts.length}</strong>
+                </div>
+
+            </div>
+
+            ${
+                active
+                ?
+                `
+                <div class="card">
+
+                    <h3>Elección activa</h3>
+
+                    <h2>${escapeHTML(active.name)}</h2>
+
+                    <p>${escapeHTML(active.description || "")}</p>
+
+                    <span class="status active">
+                        ACTIVA
+                    </span>
+
+                    <br><br>
+
+                    <button class="primary"
+                        onclick="editElection('${active.id}')">
+                        Gestionar elección
+                    </button>
+
+                </div>
+                `
+                :
+                `
+                <div class="card empty">
+
+                    <div class="empty-icon">🗳️</div>
+
+                    <h2>No hay elecciones activas</h2>
+
+                    <p>
+                        Cree una elección para comenzar.
+                    </p>
+
+                    <button class="primary"
+                        onclick="go('create')">
+                        Crear elección
+                    </button>
+
+                </div>
+                `
+            }
+
+        `;
+
+        return;
+    }
+
+
+    if(currentView === "elections"){
+
+        renderElectionList(main);
+
+        return;
+    }
+
+
+    if(currentView === "create"){
+
+        renderElectionForm(main);
+
+        return;
+    }
+
+
+    if(currentView === "results"){
+
+        renderResults(main);
+
+        return;
+    }
+
+
+    if(currentView === "receipts"){
+
+        renderReceipts(main);
+
+        return;
+    }
+
+
+    if(currentView === "voters"){
+
+        renderVoters(main);
+
+        return;
+    }
+
+}
+
+
+/* =========================================================
+   LISTA DE ELECCIONES
+========================================================= */
+
+function renderElectionList(main){
+
+    const data = getData();
+
+    if(data.elections.length === 0){
+
+        main.innerHTML = `
+
+            <div class="page-title">
+                <h2>Elecciones</h2>
+                <button class="primary"
+                    onclick="go('create')">
+                    + Nueva elección
+                </button>
+            </div>
+
+            <div class="card empty">
+
+                <div class="empty-icon">🗳️</div>
+
+                <h2>No hay elecciones creadas</h2>
+
+                <p>
+                    Gestión todavía no ha creado ninguna elección.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    main.innerHTML = `
+
+        <div class="page-title">
+
+            <h2>Elecciones</h2>
+
+            <button class="primary"
+                onclick="go('create')">
+                + Nueva elección
+            </button>
+
+        </div>
+
+        ${data.elections.map(e => `
+
+            <div class="card">
+
+                <div class="election-header">
+
+                    ${
+                        e.coverImage
+                        ?
+                        `<img class="cover"
+                            src="${e.coverImage}">`
+                        :
+                        `<div class="cover"></div>`
+                    }
+
+                    <div style="flex:1">
+
+                        <h2>${escapeHTML(e.name)}</h2>
+
+                        <p>
+                            ${escapeHTML(e.description || "Sin descripción")}
+                        </p>
+
+                        <span class="status ${e.status}">
+                            ${statusName(e.status)}
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <button class="primary"
+                            onclick="editElection('${e.id}')">
+                            Gestionar
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        `).join("")}
+
+    `;
+
+}
+
+
+/* =========================================================
+   CREAR / EDITAR ELECCIÓN
+========================================================= */
+
+function renderElectionForm(main){
+
+    let election = null;
+
+    if(editingElectionId){
+
+        election =
+            getData().elections
+            .find(e => e.id === editingElectionId);
+
+    }
+
+
+    const parties =
+        election
+        ?
+        election.parties
+        :
+        PARTIES.map((p,index) => ({
+            ...p,
+            candidateName:"",
+            candidateDescription:"",
+            logo:"",
+            candidatePhoto:"",
+            x:[20,250,480,250,20][index],
+            y:[100,100,100,350,350][index]
+        }));
+
+
+    main.innerHTML = `
+
+        <div class="page-title">
+
+            <div>
+                <h2>
+                    ${election ? "Editar elección" : "Nueva elección"}
+                </h2>
+
+                <p style="color:#64748b">
+                    Gestión configura todos los elementos.
+                </p>
+            </div>
+
+            <button class="secondary"
+                onclick="go('elections')">
+                Cancelar
+            </button>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Información de la elección</h3>
+
+            <div class="form-group">
+                <label>Nombre de la elección</label>
+                <input id="electionName"
+                    value="${escapeAttr(election?.name || "")}"
+                    placeholder="Ej. Elección familiar 2026">
+            </div>
+
+            <div class="form-group">
+                <label>Tema de la elección</label>
+                <input id="electionTheme"
+                    value="${escapeAttr(election?.theme || "")}"
+                    placeholder="Gestión decide el tema">
+            </div>
+
+            <div class="form-group">
+                <label>Descripción de la elección</label>
+                <textarea id="electionDescription"
+                    placeholder="Descripción general de la elección">${escapeHTML(election?.description || "")}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Imagen de portada</label>
+                <input id="coverImage"
+                    type="file"
+                    accept="image/*"
+                    onchange="previewFile(this,'coverPreview')">
+
+                ${
+                    election?.coverImage
+                    ?
+                    `<img id="coverPreview"
+                        class="preview"
+                        src="${election.coverImage}">`
+                    :
+                    `<img id="coverPreview"
+                        class="preview hidden">`
+                }
+
+            </div>
+
+            <div class="upload-grid">
+
+                <div class="form-group">
+
+                    <label>Fecha y hora de inicio</label>
+
+                    <input id="startDate"
+                        type="datetime-local"
+                        value="${escapeAttr(election?.startDate || "")}">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Fecha y hora de finalización</label>
+
+                    <input id="endDate"
+                        type="datetime-local"
+                        value="${escapeAttr(election?.endDate || "")}">
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Partidos y candidatos</h3>
+
+            <p style="color:#64748b">
+                Gestión adjunta los logos, las fotos y escribe la descripción de cada candidato.
+            </p>
+
+            ${parties.map((party,index) => `
+
+                <div class="party-editor">
+
+                    <div class="party-top">
+
+                        <div class="party-name">
+                            ${party.name}
+                        </div>
+
+                        <span>
+                            Partido ${index + 1}
+                        </span>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Nombre del candidato</label>
+
+                        <input
+                            id="candidateName_${index}"
+                            value="${escapeAttr(party.candidateName || "")}"
+                            placeholder="Nombre del candidato">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>
+                            Descripción del candidato
+                        </label>
+
+                        <textarea
+                            id="candidateDescription_${index}"
+                            placeholder="Escriba aquí la descripción del candidato, propuesta u opción...">${escapeHTML(party.candidateDescription || "")}</textarea>
+
+                    </div>
+
+
+                    <div class="upload-grid">
+
+                        <div class="form-group">
+
+                            <label>
+                                Logo del partido
+                            </label>
+
+                            <input
+                                id="logo_${index}"
+                                type="file"
+                                accept="image/*"
+                                onchange="previewFile(this,'logoPreview_${index}')">
+
+                            ${
+                                party.logo
+                                ?
+                                `<img id="logoPreview_${index}"
+                                    class="preview logo"
+                                    src="${party.logo}">`
+                                :
+                                `<img id="logoPreview_${index}"
+                                    class="preview logo hidden">`
+                            }
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Foto del candidato
+                            </label>
+
+                            <input
+                                id="photo_${index}"
+                                type="file"
+                                accept="image/*"
+                                onchange="previewFile(this,'photoPreview_${index}')">
+
+                            ${
+                                party.candidatePhoto
+                                ?
+                                `<img id="photoPreview_${index}"
+                                    class="preview"
+                                    src="${party.candidatePhoto}">`
+                                :
+                                `<img id="photoPreview_${index}"
+                                    class="preview hidden">`
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `).join("")}
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Posición del tarjetón electoral</h3>
+
+            <div class="position-help">
+                🖱️ En computadora: arrastre cada tarjeta con el mouse.
+                <br>
+                📱 En teléfono/tablet: manténgala presionada y muévala con el dedo.
+                <br>
+                Gestión puede colocar cada partido prácticamente en cualquier posición.
+            </div>
+
+            <div class="ballot-wrapper editor-ballot">
+
+                <div class="ballot" id="editorBallot">
+
+                    <div class="ballot-title">
+                        TARJETÓN ELECTORAL
+                    </div>
+
+                    <div class="ballot-subtitle">
+                        Vista previa configurada por Gestión
+                    </div>
+
+                    ${parties.map((party,index) => `
+
+                        <div
+                            class="ballot-card drag-card"
+                            id="drag_${index}"
+                            data-index="${index}"
+                            style="
+                                left:${party.x}px;
+                                top:${party.y}px;
+                            "
+                            ontouchstart="touchStart(event)"
+                            ontouchmove="touchMove(event)"
+                            ontouchend="touchEnd(event)"
+                            onmousedown="dragStart(event)"
+                        >
+
+                            ${
+                                party.logo
+                                ?
+                                `<img class="party-logo"
+                                    src="${party.logo}">`
+                                :
+                                `<div style="height:50px;text-align:center;color:#aaa;padding-top:15px">
+                                    LOGO
+                                </div>`
+                            }
+
+                            ${
+                                party.candidatePhoto
+                                ?
+                                `<img class="candidate-photo"
+                                    src="${party.candidatePhoto}">`
+                                :
+                                `<div class="candidate-photo"
+                                    style="display:flex;align-items:center;justify-content:center;color:#aaa">
+                                    FOTO
+                                </div>`
+                            }
+
+                            <h4>
+                                ${party.candidateName || "Candidato"}
+                            </h4>
+
+                            <div class="candidate-desc">
+                                ${
+                                    party.candidateDescription ||
+                                    "Descripción del candidato"
+                                }
+                            </div>
+
+                            <button class="select-ballot">
+                                Seleccionar
+                            </button>
+
+                        </div>
+
+                    `).join("")}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+
+                <button class="primary"
+                    onclick="saveElection()">
+
+                    ${election ? "Guardar cambios" : "Guardar como borrador"}
+
+                </button>
+
+                ${
+                    election
+                    ?
+                    election.status === "draft"
+                    ?
+                    `<button class="success"
+                        onclick="saveElection('active')">
+                        Publicar y activar
+                    </button>`
+                    :
+                    ""
+                }
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    setupDragEvents();
+
+}
+
+
+/* =========================================================
+   ARCHIVOS / IMÁGENES
+========================================================= */
+
+function previewFile(input, previewId){
+
+    const file = input.files[0];
+
+    if(!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(){
+
+        const img =
+            document.getElementById(previewId);
+
+        img.src = reader.result;
+
+        img.classList.remove("hidden");
+
+    };
+
+    reader.readAsDataURL(file);
+
+}
+
+
+function fileToDataURL(input){
+
+    return new Promise(resolve => {
+
+        if(!input || !input.files[0]){
+
+            resolve(null);
+
+            return;
+        }
+
+        const reader =
+            new FileReader();
+
+        reader.onload =
+            () => resolve(reader.result);
+
+        reader.readAsDataURL(input.files[0]);
+
+    });
+
+}
+
+
+/* =========================================================
+   DRAG & DROP LIBRE
+========================================================= */
+
+let dragging = null;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+
+
+function setupDragEvents(){
+
+    document.querySelectorAll(".drag-card")
+        .forEach(card => {
+
+            card.addEventListener(
+                "mousedown",
+                dragStart
+            );
+
+        });
+
+}
+
+
+function dragStart(e){
+
+    if(e.target.tagName === "BUTTON") return;
+
+    const card =
+        e.currentTarget || e.target.closest(".drag-card");
+
+    if(!card) return;
+
+    dragging = card;
+
+    const rect =
+        card.getBoundingClientRect();
+
+    dragOffsetX =
+        e.clientX - rect.left;
+
+    dragOffsetY =
+        e.clientY - rect.top;
+
+    document.addEventListener(
+        "mousemove",
+        dragMove
+    );
+
+    document.addEventListener(
+        "mouseup",
+        dragEnd
+    );
+
+}
+
+
+function dragMove(e){
+
+    if(!dragging) return;
+
+    const ballot =
+        document.getElementById("editorBallot");
+
+    const rect =
+        ballot.getBoundingClientRect();
+
+    let x =
+        e.clientX -
+        rect.left -
+        dragOffsetX;
+
+    let y =
+        e.clientY -
+        rect.top -
+        dragOffsetY;
+
+    x = Math.max(
+        0,
+        Math.min(
+            x,
+            rect.width - dragging.offsetWidth
+        )
+    );
+
+    y = Math.max(
+        65,
+        Math.min(
+            y,
+            rect.height - dragging.offsetHeight
+        )
+    );
+
+    dragging.style.left = x + "px";
+    dragging.style.top = y + "px";
+
+}
+
+
+function dragEnd(){
+
+    dragging = null;
+
+    document.removeEventListener(
+        "mousemove",
+        dragMove
+    );
+
+    document.removeEventListener(
+        "mouseup",
+        dragEnd
+    );
+
+}
+
+
+/* =========================================================
+   TOUCH
+========================================================= */
+
+let touchCard = null;
+
+
+function touchStart(e){
+
+    touchCard =
+        e.currentTarget;
+
+    const touch =
+        e.touches[0];
+
+    const rect =
+        touchCard.getBoundingClientRect();
+
+    dragOffsetX =
+        touch.clientX - rect.left;
+
+    dragOffsetY =
+        touch.clientY - rect.top;
+
+}
+
+
+function touchMove(e){
+
+    if(!touchCard) return;
+
+    e.preventDefault();
+
+    const touch =
+        e.touches[0];
+
+    const ballot =
+        document.getElementById("editorBallot");
+
+    const rect =
+        ballot.getBoundingClientRect();
+
+    let x =
+        touch.clientX -
+        rect.left -
+        dragOffsetX;
+
+    let y =
+        touch.clientY -
+        rect.top -
+        dragOffsetY;
+
+    x = Math.max(
+        0,
+        Math.min(
+            x,
+            rect.width - touchCard.offsetWidth
+        )
+    );
+
+    y = Math.max(
+        65,
+        Math.min(
+            y,
+            rect.height - touchCard.offsetHeight
+        )
+    );
+
+    touchCard.style.left =
+        x + "px";
+
+    touchCard.style.top =
+        y + "px";
+
+}
+
+
+function touchEnd(){
+
+    touchCard = null;
+
+}
+
+
+/* =========================================================
+   GUARDAR ELECCIÓN
+========================================================= */
+
+async function saveElection(forceStatus=null){
+
+    const name =
+        document.getElementById("electionName").value.trim();
+
+    if(!name){
+
+        alert("Debe colocar el nombre de la elección.");
+
+        return;
+    }
+
+
+    const data = getData();
+
+    let election = null;
+
+    if(editingElectionId){
+
+        election =
+            data.elections.find(
+                e => e.id === editingElectionId
+            );
+
+    }
+
+
+    const parties = [];
+
+
+    for(let i=0;i<PARTIES.length;i++){
+
+        const oldParty =
+            election?.parties?.[i] || {};
+
+
+        const logo =
+            await fileToDataURL(
+                document.getElementById("logo_"+i)
+            ) || oldParty.logo || "";
+
+
+        const photo =
+            await fileToDataURL(
+                document.getElementById("photo_"+i)
+            ) || oldParty.candidatePhoto || "";
+
+
+        const card =
+            document.getElementById("drag_"+i);
+
+
+        parties.push({
+
+            id:PARTIES[i].id,
+
+            name:PARTIES[i].name,
+
+            candidateName:
+                document
+                .getElementById(
+                    "candidateName_"+i
+                ).value.trim(),
+
+            candidateDescription:
+                document
+                .getElementById(
+                    "candidateDescription_"+i
+                ).value.trim(),
+
+            logo:logo,
+
+            candidatePhoto:photo,
+
+            x:parseFloat(card.style.left) || 0,
+
+            y:parseFloat(card.style.top) || 65,
+
+            votes:oldParty.votes || 0
+
+        });
+
+    }
+
+
+    if(!election){
+
+        election = {
+
+            id:
+                "ELEC-" +
+                Date.now(),
+
+            name:name,
+
+            theme:
+                document
+                .getElementById("electionTheme")
+                .value.trim(),
+
+            description:
+                document
+                .getElementById("electionDescription")
+                .value.trim(),
+
+            coverImage:
+                await fileToDataURL(
+                    document.getElementById("coverImage")
+                ) || "",
+
+            startDate:
+                document.getElementById("startDate").value,
+
+            endDate:
+                document.getElementById("endDate").value,
+
+            status:
+                forceStatus || "draft",
+
+            parties:parties,
+
+            votedUsers:[],
+
+            createdAt:
+                new Date().toISOString()
+
+        };
+
+        data.elections.push(election);
+
+    }else{
+
+        election.name = name;
+
+        election.theme =
+            document.getElementById("electionTheme").value.trim();
+
+        election.description =
+            document.getElementById("electionDescription").value.trim();
+
+        election.coverImage =
+            await fileToDataURL(
+                document.getElementById("coverImage")
+            ) || election.coverImage || "";
+
+        election.startDate =
+            document.getElementById("startDate").value;
+
+        election.endDate =
+            document.getElementById("endDate").value;
+
+        election.parties =
+            parties;
+
+        if(forceStatus){
+            election.status = forceStatus;
+        }
+
+    }
+
+
+    saveData(data);
+
+    editingElectionId = null;
+
+    alert(
+        forceStatus === "active"
+        ?
+        "La elección fue publicada y activada."
+        :
+        "Elección guardada correctamente."
+    );
+
+    go("elections");
+
+}
+
+
+/* =========================================================
+   EDITAR
+========================================================= */
+
+function editElection(id){
+
+    editingElectionId = id;
+
+    currentView = "create";
+
+    render();
+
+}
+
+
+/* =========================================================
+   RESULTADOS
+========================================================= */
+
+function renderResults(main){
+
+    const data = getData();
+
+    const elections =
+        data.elections;
+
+    if(elections.length === 0){
+
+        main.innerHTML = `
+
+            <div class="card empty">
+
+                <h2>No hay resultados</h2>
+
+                <p>
+                    Todavía no existen elecciones.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    let election =
+        elections.find(e => e.status === "active")
+        || elections[elections.length-1];
+
+
+    const total =
+        election.parties.reduce(
+            (sum,p) => sum + (p.votes || 0),
+            0
+        );
+
+
+    main.innerHTML = `
+
+        <div class="page-title">
+
+            <div>
+
+                <h2>Resultados</h2>
+
+                <p style="color:#64748b">
+                    ${escapeHTML(election.name)}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="grid">
+
+            <div class="stat">
+                <small>Total de votos</small>
+                <strong>${total}</strong>
+            </div>
+
+            <div class="stat">
+                <small>Votantes registrados</small>
+                <strong>${Object.keys(USERS).length-1}</strong>
+            </div>
+
+            <div class="stat">
+                <small>Participación</small>
+                <strong>
+                    ${Math.round(
+                        total /
+                        (Object.keys(USERS).length-1)
+                        *100
+                    ) || 0}%
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Votos por partido</h3>
+
+            ${
+                election.parties.map(p => {
+
+                    const votes =
+                        p.votes || 0;
+
+                    const percent =
+                        total
+                        ?
+                        Math.round(
+                            votes / total * 100
+                        )
+                        :
+                        0;
+
+                    return `
+
+                        <div style="margin:22px 0">
+
+                            <div style="
+                                display:flex;
+                                justify-content:space-between;
+                                margin-bottom:7px;
+                            ">
+
+                                <strong>
+                                    ${escapeHTML(p.name)}
+                                </strong>
+
+                                <span>
+                                    ${votes} votos
+                                    (${percent}%)
+                                </span>
+
+                            </div>
+
+                            <div style="
+                                height:18px;
+                                background:#e8edf3;
+                                border-radius:20px;
+                                overflow:hidden;
+                            ">
+
+                                <div style="
+                                    width:${percent}%;
+                                    height:100%;
+                                    background:#0757a0;
+                                "></div>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }).join("")
+            }
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   COMPROBANTES
+========================================================= */
+
+function renderReceipts(main){
+
+    const data = getData();
+
+    main.innerHTML = `
+
+        <div class="page-title">
+
+            <h2>Comprobantes de votación</h2>
+
+        </div>
+
+
+        ${
+            data.receipts.length === 0
+            ?
+            `
+            <div class="card empty">
+
+                <div class="empty-icon">🧾</div>
+
+                <h2>No hay comprobantes</h2>
+
+                <p>
+                    Los comprobantes aparecerán aquí cuando se emitan votos.
+                </p>
+
+            </div>
+            `
+            :
+            `
+            <div class="card">
+
+                ${data.receipts
+                    .slice()
+                    .reverse()
+                    .map(r => `
+
+                    <div style="
+                        padding:16px 0;
+                        border-bottom:1px solid var(--border);
+                    ">
+
+                        <strong>
+                            Comprobante #${String(r.number).padStart(6,"0")}
+                        </strong>
+
+                        <p style="margin:7px 0;color:#64748b">
+
+                            ${escapeHTML(r.voterName)}
+                            ·
+                            ${escapeHTML(r.partyName)}
+                            ·
+                            ${formatDate(r.date)}
+
+                        </p>
+
+                    </div>
+
+                `).join("")}
+
+            </div>
+            `
+        }
+
+    `;
+
+}
+
+
+/* =========================================================
+   VOTANTES
+========================================================= */
+
+function renderVoters(main){
+
+    const data = getData();
+
+    const election =
+        data.elections.find(
+            e => e.status === "active"
+        );
+
+
+    const voters =
+        Object.entries(USERS)
+        .filter(([_,u]) => u.role === "voter");
+
+
+    main.innerHTML = `
+
+        <div class="page-title">
+            <h2>Votantes</h2>
+        </div>
+
+        <div class="card">
+
+            ${
+                election
+                ?
+                voters.map(([username,user]) => {
+
+                    const voted =
+                        election.votedUsers.includes(username);
+
+                    return `
+
+                        <div style="
+                            display:flex;
+                            justify-content:space-between;
+                            align-items:center;
+                            padding:14px 0;
+                            border-bottom:1px solid var(--border);
+                        ">
+
+                            <div>
+
+                                <strong>
+                                    ${escapeHTML(user.name)}
+                                </strong>
+
+                                <div style="
+                                    font-size:12px;
+                                    color:#64748b;
+                                ">
+                                    ${username}
+                                </div>
+
+                            </div>
+
+                            ${
+                                voted
+                                ?
+                                `<span class="status active">
+                                    VOTÓ
+                                </span>`
+                                :
+                                `<span class="status draft">
+                                    PENDIENTE
+                                </span>`
+                            }
+
+                        </div>
+
+                    `;
+
+                }).join("")
+                :
+                `
+                <div class="empty">
+
+                    <h3>
+                        No hay una elección activa.
+                    </h3>
+
+                </div>
+                `
+            }
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   VOTANTE
+========================================================= */
+
+function renderVoter(main){
+
+    if(currentView === "home"){
+
+        const data = getData();
+
+        const active =
+            data.elections.find(
+                e => e.status === "active"
+            );
+
+
+        main.innerHTML = `
+
+            <div class="page-title">
+
+                <div>
+
+                    <h2>Inicio</h2>
+
+                    <p style="color:#64748b">
+                        Bienvenido al Consejo Familiar Electoral.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            ${
+                active
+                ?
+                `
+                <div class="card">
+
+                    ${
+                        active.coverImage
+                        ?
+                        `<img src="${active.coverImage}"
+                            style="
+                                width:100%;
+                                max-height:250px;
+                                object-fit:cover;
+                                border-radius:12px;
+                                margin-bottom:20px;
+                            ">`
+                        :
+                        ""
+                    }
+
+                    <span class="status active">
+                        ELECCIÓN ACTIVA
+                    </span>
+
+                    <h2>
+                        ${escapeHTML(active.name)}
+                    </h2>
+
+                    <p>
+                        ${escapeHTML(active.description || "")}
+                    </p>
+
+                    <button class="primary"
+                        onclick="go('vote')">
+                        Ver tarjetón electoral
+                    </button>
+
+                </div>
+                `
+                :
+                `
+                <div class="card empty">
+
+                    <div class="empty-icon">🗳️</div>
+
+                    <h2>
+                        No hay elecciones disponibles
+                    </h2>
+
+                    <p>
+                        Gestión todavía no ha publicado una elección.
+                    </p>
+
+                </div>
+                `
+            }
+
+        `;
+
+        return;
+    }
+
+
+    if(currentView === "vote"){
+
+        renderVoting(main);
+
+        return;
+    }
+
+
+    if(currentView === "myreceipt"){
+
+        renderMyReceipt(main);
+
+        return;
+    }
+
+}
+
+
+/* =========================================================
+   TARJETÓN PARA VOTAR
+========================================================= */
+
+function renderVoting(main){
+
+    const data = getData();
+
+    const election =
+        data.elections.find(
+            e => e.status === "active"
+        );
+
+
+    if(!election){
+
+        main.innerHTML = `
+
+            <div class="card empty">
+
+                <div class="empty-icon">🗳️</div>
+
+                <h2>No hay elecciones disponibles</h2>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    if(election.votedUsers.includes(currentUser.username)){
+
+        main.innerHTML = `
+
+            <div class="card empty">
+
+                <div class="empty-icon">✓</div>
+
+                <h2>Ya emitiste tu voto</h2>
+
+                <p>
+                    Tu participación ya fue registrada.
+                </p>
+
+                <button class="primary"
+                    onclick="go('myreceipt')">
+                    Ver comprobante
+                </button>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    main.innerHTML = `
+
+        <div class="page-title">
+
+            <div>
+
+                <h2>Tarjetón electoral</h2>
+
+                <p style="color:#64748b">
+                    ${escapeHTML(election.name)}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            ${
+                election.theme
+                ?
+                `<strong>Tema:</strong>
+                 ${escapeHTML(election.theme)}`
+                :
+                ""
+            }
+
+            ${
+                election.description
+                ?
+                `<p>${escapeHTML(election.description)}</p>`
+                :
+                ""
+            }
+
+        </div>
+
+
+        <div class="ballot-wrapper">
+
+            <div class="ballot" id="voterBallot">
+
+                <div class="ballot-title">
+                    TARJETÓN ELECTORAL
+                </div>
+
+                <div class="ballot-subtitle">
+                    Seleccione una opción
+                </div>
+
+                ${election.parties.map((party,index) => `
+
+                    <div
+                        class="ballot-card"
+                        id="voteCard_${index}"
+                        style="
+                            left:${party.x}px;
+                            top:${party.y}px;
+                        "
+                        onclick="selectParty('${party.id}')"
+                    >
+
+                        ${
+                            party.logo
+                            ?
+                            `<img
+                                class="party-logo"
+                                src="${party.logo}">`
+                            :
+                            ""
+                        }
+
+                        ${
+                            party.candidatePhoto
+                            ?
+                            `<img
+                                class="candidate-photo"
+                                src="${party.candidatePhoto}">`
+                            :
+                            ""
+                        }
+
+                        <h4>
+                            ${escapeHTML(party.name)}
+                        </h4>
+
+                        <div style="
+                            text-align:center;
+                            font-weight:bold;
+                            font-size:13px;
+                        ">
+                            ${escapeHTML(
+                                party.candidateName ||
+                                "Candidato"
+                            )}
+                        </div>
+
+                        <div class="candidate-desc">
+
+                            ${escapeHTML(
+                                party.candidateDescription ||
+                                "Sin descripción."
+                            )}
+
+                        </div>
+
+                        <button
+                            class="select-ballot"
+                            type="button">
+
+                            Seleccionar
+
+                        </button>
+
+                    </div>
+
+                `).join("")}
+
+            </div>
+
+        </div>
+
+
+        <div class="card"
+            id="voteConfirmation"
+            style="display:none">
+
+            <h3>Confirmar voto</h3>
+
+            <p id="selectedPartyText"></p>
+
+            <button class="success"
+                onclick="submitVote()">
+                Confirmar y emitir voto
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+let selectedPartyId = null;
+
+
+function selectParty(id){
+
+    selectedPartyId = id;
+
+    document.querySelectorAll(".ballot-card")
+        .forEach(card =>
+            card.classList.remove("selected")
+        );
+
+    const party =
+        getData()
+        .elections
+        .find(e => e.status === "active")
+        .parties
+        .find(p => p.id === id);
+
+
+    const card =
+        document.getElementById(
+            "voteCard_" +
+            getData()
+            .elections
+            .find(e => e.status === "active")
+            .parties
+            .findIndex(p => p.id === id)
+        );
+
+
+    if(card){
+        card.classList.add("selected");
+    }
+
+
+    document.getElementById(
+        "voteConfirmation"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "selectedPartyText"
+    ).textContent =
+        "Has seleccionado: " +
+        party.name +
+        ". Revisa tu selección antes de confirmar.";
+}
+
+
+function submitVote(){
+
+    if(!selectedPartyId){
+
+        alert("Seleccione una opción.");
+
+        return;
+    }
+
+
+    const data = getData();
+
+    const election =
+        data.elections.find(
+            e => e.status === "active"
+        );
+
+
+    if(!election){
+
+        alert("La elección ya no está activa.");
+
+        return;
+    }
+
+
+    if(
+        election.votedUsers
+        .includes(currentUser.username)
+    ){
+
+        alert("Este usuario ya votó.");
+
+        return;
+    }
+
+
+    const party =
+        election.parties.find(
+            p => p.id === selectedPartyId
+        );
+
+
+    if(!party) return;
+
+
+    party.votes =
+        (party.votes || 0) + 1;
+
+
+    election.votedUsers.push(
+        currentUser.username
+    );
+
+
+    data.receiptCounter++;
+
+
+    const receipt = {
+
+        number:data.receiptCounter,
+
+        id:
+            "CFE-" +
+            Date.now(),
+
+        electionId:election.id,
+
+        electionName:election.name,
+
+        voterUsername:
+            currentUser.username,
+
+        voterName:
+            currentUser.name,
+
+        partyId:
+            party.id,
+
+        partyName:
+            party.name,
+
+        candidateName:
+            party.candidateName,
+
+        date:
+            new Date().toISOString()
+
+    };
+
+
+    data.receipts.push(receipt);
+
+    saveData(data);
+
+
+    alert(
+        "Tu voto fue registrado correctamente."
+    );
+
+
+    go("myreceipt");
+
+}
+
+
+/* =========================================================
+   MI COMPROBANTE
+========================================================= */
+
+function renderMyReceipt(main){
+
+    const data = getData();
+
+    const receipt =
+        data.receipts
+        .slice()
+        .reverse()
+        .find(
+            r =>
+                r.voterUsername ===
+                currentUser.username
+        );
+
+
+    if(!receipt){
+
+        main.innerHTML = `
+
+            <div class="card empty">
+
+                <div class="empty-icon">🧾</div>
+
+                <h2>No tienes comprobantes</h2>
+
+                <p>
+                    Todavía no has emitido un voto.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    main.innerHTML = `
+
+        <div class="page-title">
+
+            <h2>Mi comprobante</h2>
+
+        </div>
+
+
+        <div class="receipt">
+
             <div class="receipt-header">
-                <div class="receipt-logo">EF</div>
 
-                <div>
-                    <span>ELECCIONES FAMILIARES</span>
-                    <h2 id="receiptElectionName"></h2>
-                </div>
-            </div>
+                <strong>
+                    CONSEJO FAMILIAR ELECTORAL
+                </strong>
 
-            <div class="receipt-divider"></div>
-
-            <div class="receipt-number">
-                <span>COMPROBANTE</span>
-                <strong id="receiptNumber"></strong>
-            </div>
-
-            <div class="receipt-data">
-
-                <div>
-                    <span>VOTANTE</span>
-                    <strong id="receiptVoter"></strong>
-                </div>
-
-                <div>
-                    <span>PARTIDO</span>
-                    <strong id="receiptParty"></strong>
-                </div>
-
-                <div>
-                    <span>FECHA</span>
-                    <strong id="receiptDate"></strong>
-                </div>
-
-                <div>
-                    <span>HORA</span>
-                    <strong id="receiptTime"></strong>
-                </div>
+                <h2>
+                    Comprobante de votación
+                </h2>
 
             </div>
 
-            <div class="receipt-confirmed">
-                ✓ VOTO REGISTRADO
-            </div>
 
-            <p class="receipt-note">
-                Este comprobante confirma el registro del voto.
-            </p>
+            <div class="receipt-body">
 
-        </div>
-    </div>
+                <p>
+                    Número de comprobante
+                </p>
 
+                <div class="receipt-number">
+                    #${String(
+                        receipt.number
+                    ).padStart(6,"0")}
+                </div>
 
-    <!-- CONFIRMACIÓN -->
-    <div id="confirmModal" class="modal hidden">
+                <hr>
 
-        <div class="confirm-card">
+                <p>
+                    <strong>Elección:</strong><br>
+                    ${escapeHTML(receipt.electionName)}
+                </p>
 
-            <div class="confirm-icon">🗳️</div>
+                <p>
+                    <strong>Votante:</strong><br>
+                    ${escapeHTML(receipt.voterName)}
+                </p>
 
-            <h2>Confirmar voto</h2>
+                <p>
+                    <strong>Partido seleccionado:</strong><br>
+                    ${escapeHTML(receipt.partyName)}
+                </p>
 
-            <p>
-                Estás a punto de registrar tu voto por:
-            </p>
+                <p>
+                    <strong>Candidato:</strong><br>
+                    ${escapeHTML(receipt.candidateName || "—")}
+                </p>
 
-            <strong id="selectedPartyName"></strong>
+                <p>
+                    <strong>Fecha y hora:</strong><br>
+                    ${formatDate(receipt.date)}
+                </p>
 
-            <p class="warning-text">
-                Una vez confirmado, no podrás cambiar tu voto.
-            </p>
+                <hr>
 
-            <div class="confirm-buttons">
-                <button class="secondary-btn" onclick="closeConfirmModal()">
-                    Cancelar
-                </button>
+                <p style="
+                    color:#64748b;
+                    font-size:13px;
+                ">
+                    Este comprobante confirma que la participación fue registrada por el sistema CFE.
+                </p>
 
-                <button class="primary-btn" onclick="submitVote()">
-                    Confirmar voto
-                </button>
             </div>
 
         </div>
-    </div>
 
-</div>
+    `;
 
-<script src="script.js"></script>
+}
+
+
+/* =========================================================
+   FUNCIONES AUXILIARES
+========================================================= */
+
+function statusName(status){
+
+    const names = {
+
+        draft:"BORRADOR",
+
+        active:"ACTIVA",
+
+        paused:"PAUSADA",
+
+        finished:"FINALIZADA"
+
+    };
+
+    return names[status] || status;
+
+}
+
+
+function formatDate(date){
+
+    return new Date(date)
+        .toLocaleString(
+            "es-VE",
+            {
+                dateStyle:"short",
+                timeStyle:"short"
+            }
+        );
+
+}
+
+
+function escapeHTML(value){
+
+    if(value === null || value === undefined)
+        return "";
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+function escapeAttr(value){
+
+    return escapeHTML(value || "");
+
+}
+
+
+/* =========================================================
+   ARRANQUE
+========================================================= */
+
+render();
+
+</script>
 
 </body>
 </html>
