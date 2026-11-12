@@ -1,5 +1,7 @@
 # Consejo Familiar Electoral
 
+**Funciona ya**: abre `index.html` (o publícalo en GitHub Pages) y entra con `admin` / `A1234`. Sin backend usa *modo local* (los datos quedan en ese navegador). Para que todos los dispositivos compartan datos, conecta el backend de abajo.
+
 Carpeta única: la web (`index.html`, `app.js`, `styles.css`, `config.js`, logos) + el backend (`worker/`).
 
 ## Backend (Cloudflare) — 4 comandos

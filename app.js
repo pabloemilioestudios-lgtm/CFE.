@@ -1,4 +1,5 @@
 const API=(window.CFE_API||"").replace(/\/$/,""),NAME=window.CFE_NAME||"Consejo Familiar Electoral";
+const LOCAL=!API||/TU-USUARIO/.test(API); // sin backend configurado: modo local (todo funciona en este navegador)
 const $=s=>document.querySelector(s),val=i=>$("#"+i).value.trim();
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
 let token=localStorage.getItem("cfe_t")||sessionStorage.getItem("cfe_t"),me=null,view="inicio",tab="login",pending=0;
@@ -27,11 +28,13 @@ const ballot=`<svg viewBox="0 0 160 140" width="150"><defs><linearGradient id="g
 /* ---------- utilidades ---------- */
 function toast(m,good){const t=$("#toast");t.style.background=good?"#16a34a":"";t.textContent=m;t.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display="none",good?1500:3500)}
 async function api(p,m="GET",b){
+  if(LOCAL){try{return await window.localApi(p,m,b,token)}catch(e){if(e.status===401&&token&&!p.startsWith("/api/log"))logout();throw e}}
   const r=await fetch(API+p,{method:m,headers:{"Content-Type":"application/json",...(token?{Authorization:"Bearer "+token}:{})},body:b?JSON.stringify(b):undefined});
   const d=await r.json().catch(()=>({}));
   if(!r.ok){if(r.status===401&&token&&!p.startsWith("/api/log"))logout();throw new Error(d.error||"Error de conexión")}
   return d}
 async function run(fn,after){try{await fn();toast("Listo",1);after?after():load()}catch(e){toast(e.message)}}
+function social(p){if(LOCAL)toast("Entrar con "+p+" se activa al conectar el backend de Cloudflare (ver README). Por ahora usa tu correo.");else location.href=API+"/api/oauth/"+p}
 function logout(){token=null;me=null;localStorage.removeItem("cfe_t");sessionStorage.removeItem("cfe_t");render()}
 function session(d){token=d.token;me=d.user;(($("#rm")||{}).checked===false?sessionStorage:localStorage).setItem("cfe_t",token);view="inicio";render()}
 const admin=()=>me&&me.role==="admin";
@@ -52,8 +55,8 @@ function authView(){
   ${reg?"":`<div class="row sp" style="margin-bottom:14px"><label style="display:flex;align-items:center;gap:8px"><input id="rm" type="checkbox" checked style="width:auto;margin:0">Recordar mi cuenta</label><button class="link lnk" onclick="toast('Pide al administrador que restablezca tu contraseña desde Miembros.')">¿Olvidaste tu contraseña?</button></div>`}
   <button class="go" onclick="enter()">${ic("login",22)} ${reg?"Crear mi cuenta":"Iniciar Sesión"}</button>
   <div class="sepr">o continúa con</div>
-  <div class="soc"><button title="GitHub" onclick="location.href=API+'/api/oauth/github'"><svg width="26" height="26" viewBox="0 0 24 24" fill="#111"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg></button>
-   <button title="Google" onclick="location.href=API+'/api/oauth/google'"><span style="font:700 26px Poppins;background:linear-gradient(90deg,#4285f4,#ea4335,#fbbc05,#34a853);-webkit-background-clip:text;color:transparent">G</span></button>
+  <div class="soc"><button title="GitHub" onclick="social('github')"><svg width="26" height="26" viewBox="0 0 24 24" fill="#111"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg></button>
+   <button title="Google" onclick="social('google')"><span style="font:700 26px Poppins;background:linear-gradient(90deg,#4285f4,#ea4335,#fbbc05,#34a853);-webkit-background-clip:text;color:transparent">G</span></button>
    <button title="${reg?"Ya tengo cuenta":"Crear cuenta"}" onclick="tab='${reg?"login":"reg"}';render()">${ic("user",26)}</button></div>
   <div class="note">${ic("shield",24)}<span>Tu información está protegida y solo se usará para fines del ${esc(NAME)}.</span></div></div></div></div>`}
 async function enter(){try{session(tab==="reg"?await api("/api/register","POST",{name:val("n"),username:val("u"),password:$("#p").value}):await api("/api/login","POST",{username:val("u"),password:$("#p").value}))}catch(e){toast(e.message)}}
@@ -68,7 +71,7 @@ async function render(){
    ${NAV.map(n=>`<button class="nav ${view===n[0]?"on":""}" onclick="go('${n[0]}')">${ic(n[1],22)}<span>${n[2]}</span></button>`).join("")}
    <div class="shield">${ic("shield",34)}<b>Transparencia</b><br>en cada decisión</div>
    <button class="me" onclick="go('config')"><div class="av">${esc(me.name[0]||"?").toUpperCase()}</div><span>${esc(me.name)}<small>${admin()?"Administrador":"Miembro"}</small></span>${ic("down",16)}</button></aside>
-   <div class="col"><header><span class="tag">Participación<i>•</i>Transparencia<i>•</i>Unidad</span><div class="r"><button class="bell" onclick="go('elecciones')" title="Pendientes">${ic("bell",24)}${pending?`<b>${pending}</b>`:""}</button><button class="ghost" onclick="logout()">Cerrar sesión ${ic("out",18)}</button></div></header><main id="v"></main></div>`;
+   <div class="col"><header><span class="tag">Participación<i>•</i>Transparencia<i>•</i>Unidad</span><div class="r">${LOCAL?'<span class="badge" title="Conecta el backend para compartir datos entre dispositivos">Modo local</span>':""}<button class="bell" onclick="go('elecciones')" title="Pendientes">${ic("bell",24)}${pending?`<b>${pending}</b>`:""}</button><button class="ghost" onclick="logout()">Cerrar sesión ${ic("out",18)}</button></div></header><main id="v"></main></div>`;
   load()}
 async function load(){const el=$("#v");if(!el)return;try{el.innerHTML=await VIEWS[view]()}catch(e){toast(e.message)}}
 
